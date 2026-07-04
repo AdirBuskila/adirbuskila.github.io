@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>OG image source — screenshot at 1200x630 to regenerate og.png</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1200px; height: 630px; overflow: hidden; }
+  .card {
+    position: relative;
+    width: 1200px;
+    height: 630px;
+    background:
+      radial-gradient(760px 460px at 8% -10%, rgba(34,211,238,.10), transparent 60%),
+      radial-gradient(700px 460px at 100% 115%, rgba(167,139,250,.10), transparent 60%),
+      #0a0b0e;
+    color: #e8eaf0;
+    font-family: 'Space Grotesk', sans-serif;
+    padding: 84px 88px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+    background-size: 46px 46px;
+    -webkit-mask-image: radial-gradient(1100px 720px at 45% 0%, #000 25%, transparent 92%);
+  }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .left { position: relative; max-width: 620px; }
+  .handle { font-size: 19px; font-weight: 600; letter-spacing: .16em; color: #767e8b; }
+  .handle b { color: #22d3ee; font-weight: 600; }
+  .name { font-size: 88px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.02; margin: 22px 0 8px; }
+  .deck { font-size: 88px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.02;
+          background: linear-gradient(100deg, #22d3ee, #a78bfa 55%, #fb7185); -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent; padding-bottom: 6px; }
+  .sub { font-size: 27px; color: #9aa1ad; margin-top: 22px; font-weight: 500; }
+  .url { font-size: 20px; font-weight: 600; letter-spacing: .08em; color: #767e8b; margin-top: 44px; }
+  .tiles { position: relative; display: flex; flex-direction: column; gap: 18px; }
+  .tile {
+    width: 330px; border: 1px solid rgba(255,255,255,.10); border-radius: 18px;
+    background: linear-gradient(160deg, #14161c, #0d0f13);
+    padding: 22px 24px; position: relative; overflow: hidden;
+  }
+  .tile::before { content:''; position:absolute; inset:0;
+    background: radial-gradient(300px 130px at 88% -12%, var(--af), transparent 72%); }
+  .tile.soon { border-style: dashed; opacity: .8; }
+  .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .tag { font-size: 13px; font-weight: 600; letter-spacing: .17em; color: var(--a); }
+  .chip { font-size: 11px; font-weight: 600; letter-spacing: .16em; color: var(--a);
+    border: 1px solid var(--ad); background: var(--af); border-radius: 999px; padding: 5px 12px;
+    display: inline-flex; align-items: center; gap: 7px; }
+  .chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--a); box-shadow: 0 0 8px var(--a); }
+  .chip.gray { color: #767e8b; border-color: rgba(255,255,255,.12); background: rgba(255,255,255,.03); }
+  .t { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="left">
+    <div class="handle mono">@ADIRBUSKILA — <b>3 LIVE · 3 IN THE LAB</b></div>
+    <div class="name">CS Study</div>
+    <div class="deck">Tools Deck</div>
+    <div class="sub">Free interactive exam prep for computer-science courses — built by Adir Buskila.</div>
+    <div class="url mono">adirbuskila.github.io</div>
+  </div>
+  <div class="tiles">
+    <div class="tile" style="--a:#22d3ee; --ad:rgba(34,211,238,.45); --af:rgba(34,211,238,.13)">
+      <div class="row"><span class="tag mono">QUIZ ENGINE</span><span class="chip mono"><span class="dot"></span>LIVE</span></div>
+      <div class="t">Data Science</div>
+    </div>
+    <div class="tile" style="--a:#a78bfa; --ad:rgba(167,139,250,.45); --af:rgba(167,139,250,.13)">
+      <div class="row"><span class="tag mono">VISUAL TRAINER</span><span class="chip mono"><span class="dot"></span>LIVE</span></div>
+      <div class="t">Algorithms</div>
+    </div>
+    <div class="tile" style="--a:#fbbf24; --ad:rgba(251,191,36,.45); --af:rgba(251,191,36,.13)">
+      <div class="row"><span class="tag mono">EXAM SIMULATOR</span><span class="chip mono"><span class="dot"></span>LIVE</span></div>
+      <div class="t">Operating Systems</div>
+    </div>
+    <div class="tile soon" style="--a:#34d399; --ad:rgba(52,211,153,.4); --af:rgba(52,211,153,.10)">
+      <div class="row"><span class="tag mono">+3 SUBJECTS</span><span class="chip mono gray">BUILDING</span></div>
+      <div class="t" style="color:#9aa1ad">SWE · ML · Databases</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

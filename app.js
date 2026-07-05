@@ -13,6 +13,7 @@ const tools = [
     blurb: 'Exam-style question drills for the data science course — instant feedback, topic breakdowns, zero setup.',
     status: 'live',
     url: 'https://adirbuskila.github.io/data-science-quiz/',
+    repo: 'https://github.com/AdirBuskila/data-science-quiz',
     accent: '#22d3ee',
     glyph: 'plot',
   },
@@ -22,6 +23,7 @@ const tools = [
     blurb: 'Watch graphs, max-flow and shortest-path algorithms run step by step — then train on them yourself.',
     status: 'live',
     url: 'https://algorithms-theta.vercel.app/',
+    repo: 'https://github.com/AdirBuskila/algorithms',
     accent: '#a78bfa',
     glyph: 'graph',
   },
@@ -31,6 +33,7 @@ const tools = [
     blurb: 'An exam trainer distilled from 14 years of past exams — drill by topic and find your weak spots.',
     status: 'live',
     url: 'https://adirbuskila.github.io/os-exam-trainer/#home',
+    repo: 'https://github.com/AdirBuskila/os-exam-trainer',
     accent: '#fbbf24',
     glyph: 'rings',
   },
@@ -38,8 +41,9 @@ const tools = [
     subject: 'Software Engineering',
     tag: 'PRACTICE KIT',
     blurb: 'Design patterns, UML and testing drills — the theory half of SWE, made practicable.',
-    status: 'soon',
-    url: '',
+    status: 'live',
+    url: 'https://adirbuskila.github.io/software-engineering-quiz/',
+    repo: 'https://github.com/AdirBuskila/software-engineering-quiz',
     accent: '#34d399',
     glyph: 'brackets',
   },
@@ -173,3 +177,62 @@ deck.appendChild(frag);
 const liveCount = tools.filter((t) => t.status === 'live').length;
 document.getElementById('deck-count').textContent =
   `${liveCount} LIVE · ${tools.length - liveCount} IN THE LAB`;
+
+/* ==========================================================================
+   Star the source — repo links, built from the same config.
+   Every tool that has a `repo` shows up, plus the deck itself. No network
+   calls: GitHub has no star-via-URL, so each row just links to the repo page.
+   ========================================================================== */
+
+const starRepos = [
+  ...tools.filter((t) => t.repo).map((t) => ({ label: t.subject, repo: t.repo, accent: t.accent })),
+  { label: 'This deck', repo: 'https://github.com/AdirBuskila/adirbuskila.github.io', accent: '#22d3ee' },
+];
+
+const STAR_ICON =
+  '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true" focusable="false">' +
+  '<path d="M12 2.4l2.9 6.06 6.66.83-4.9 4.55 1.28 6.58L12 17.9l-5.94 3.12 1.28-6.58-4.9-4.55 6.66-.83z"/></svg>';
+
+function repoName(url) {
+  return url.replace(/^https?:\/\/github\.com\//, '').replace(/\/+$/, '');
+}
+
+const starline = document.getElementById('starline');
+if (starline) {
+  starline.innerHTML = `
+    <div class="starline-head">
+      <span class="starline-title">${STAR_ICON} ENJOYING THESE?</span>
+    </div>
+    <p class="starline-sub">Every tool here is open-source. If one saved you before an exam,
+      a ⭐ on its repo helps the next student find it.</p>
+    <div class="star-grid"></div>`;
+
+  const grid = starline.querySelector('.star-grid');
+  const starFrag = document.createDocumentFragment();
+
+  starRepos.forEach((r) => {
+    const a = document.createElement('a');
+    a.className = 'star-item';
+    a.href = r.repo;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.setAttribute('aria-label', `Star ${repoName(r.repo)} on GitHub`);
+
+    const [rr, gg, bb] = hexToRgb(r.accent);
+    a.style.setProperty('--accent', r.accent);
+    a.style.setProperty('--accent-dim', `rgba(${rr},${gg},${bb},.45)`);
+    a.style.setProperty('--accent-faint', `rgba(${rr},${gg},${bb},.13)`);
+
+    a.innerHTML = `
+      <span class="star-ic">${STAR_ICON}</span>
+      <span class="star-txt">
+        <span class="star-subject">${r.label}</span>
+        <span class="star-repo">${repoName(r.repo)}</span>
+      </span>
+      <span class="star-cta">STAR<span class="star-arrow" aria-hidden="true">↗</span></span>`;
+
+    starFrag.appendChild(a);
+  });
+
+  grid.appendChild(starFrag);
+}

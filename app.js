@@ -60,9 +60,10 @@ const tools = [
   {
     subject: 'Databases',
     tag: 'QUERY GYM',
-    blurb: 'SQL, normalization and relational-algebra practice with instant checking.',
-    status: 'soon',
-    url: '',
+    blurb: 'SQL, ERD, relational algebra and normalization — 206 questions pulled straight from past exams.',
+    status: 'live',
+    url: 'https://adirbuskila.github.io/databases-quiz/',
+    repo: 'https://github.com/AdirBuskila/databases-quiz',
     accent: '#60a5fa',
     glyph: 'stack',
   },

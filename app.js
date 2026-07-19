@@ -177,8 +177,9 @@ tools.forEach((tool, i) => {
 deck.appendChild(frag);
 
 const liveCount = tools.filter((t) => t.status === 'live').length;
+const soonCount = tools.length - liveCount;
 document.getElementById('deck-count').textContent =
-  `${liveCount} LIVE · ${tools.length - liveCount} IN THE LAB`;
+  soonCount > 0 ? `${liveCount} LIVE · ${soonCount} IN THE LAB` : `${liveCount} LIVE`;
 
 /* ==========================================================================
    Star the source — repo links, built from the same config.

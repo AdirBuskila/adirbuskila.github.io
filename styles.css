@@ -1,21 +1,35 @@
 /* ==========================================================================
-   Adir Buskila — CS Study Tools Deck
-   Hand-rolled. Dark command-deck system: near-black canvas, fine grid,
-   per-subject accent set from JS via --accent / --accent-dim / --accent-faint.
+   Adir Buskila — CS Study Tools Deck · "Signal" skin
+   Hand-rolled. A live WebGL ribbon field (signal.js) sits behind frosted
+   glass tiles. Per-subject accent set from JS via --accent / --accent-dim /
+   --accent-faint; pointer spotlight via --mx / --my / --spot; tilt via
+   --rx / --ry / --tx / --ty.
    ========================================================================== */
 
 :root {
   --bg: #0a0b0e;
-  --panel: #13151b;
-  --panel-deep: #0d0f13;
+  --bg-2: #0f1116;
+  --glass: rgba(21, 23, 31, 0.68);
+  --glass-deep: rgba(9, 10, 14, 0.78);
   --line: rgba(255, 255, 255, 0.08);
-  --ink: #e8eaf0;
+  --line-strong: rgba(255, 255, 255, 0.18);
+  --ink: #eceef4;
   --ink-dim: #9aa1ad;
-  --ink-faint: #767e8b;
+  --ink-faint: #737b88;
+  --cyan: #22d3ee;
+  --violet: #a78bfa;
   --display: 'Space Grotesk', system-ui, sans-serif;
+  --serif: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
   --mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
   --sans: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --radius: 16px;
+  --radius: 18px;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@property --beam {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,24 +44,48 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 ::selection { background: rgba(34, 211, 238, 0.28); }
 
-/* ---- Backdrop: base glows + fine grid + noise -------------------------- */
+/* ---- Signal canvas + backdrop -------------------------------------------- */
+
+/* Layering note: the canvas and backdrop sit at z-index 0 and .page at 1 —
+   NOT negative z-index. Chrome leaves negative-z root layers out of the
+   backdrop that backdrop-filter samples, so glass tiles would not blur the
+   signal behind them. */
+
+#signal {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  display: block;
+  pointer-events: none;
+}
+
+.no-signal #signal { display: none; }
 
 .backdrop {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
+  /* vignette for depth over the signal */
+  background: radial-gradient(130% 95% at 50% 38%, transparent 48%, rgba(0, 0, 0, 0.62) 100%);
+}
+
+/* CSS-only stand-in when WebGL is unavailable */
+.no-signal .backdrop {
   background:
-    radial-gradient(900px 520px at 12% -8%, rgba(34, 211, 238, 0.07), transparent 60%),
-    radial-gradient(820px 520px at 92% 112%, rgba(167, 139, 250, 0.07), transparent 60%),
+    radial-gradient(900px 520px at 12% -8%, rgba(34, 211, 238, 0.08), transparent 60%),
+    radial-gradient(820px 520px at 92% 112%, rgba(167, 139, 250, 0.08), transparent 60%),
     var(--bg);
 }
 
-.backdrop::before {
+.no-signal .backdrop::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -59,20 +97,23 @@ body {
   mask-image: radial-gradient(1300px 900px at 50% -5%, #000 20%, transparent 90%);
 }
 
+/* film grain, always */
 .backdrop::after {
   content: '';
   position: absolute;
   inset: 0;
-  opacity: 0.5;
+  opacity: 0.45;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
 }
 
 /* ---- Page frame --------------------------------------------------------- */
 
 .page {
-  max-width: 1080px;
+  position: relative;
+  z-index: 1;
+  max-width: 1120px;
   margin: 0 auto;
-  padding: clamp(24px, 5vw, 56px) clamp(18px, 4vw, 32px) 28px;
+  padding: clamp(28px, 6vw, 72px) clamp(18px, 4vw, 36px) 32px;
 }
 
 /* ---- Header -------------------------------------------------------------- */
@@ -81,82 +122,134 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 20px;
+  gap: 24px;
   flex-wrap: wrap;
-  margin-bottom: clamp(28px, 5vw, 48px);
-  animation: rise 0.6s ease both;
+  margin-bottom: clamp(32px, 5vw, 60px);
 }
 
+.id-block { min-width: 0; }
+
 .handle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-family: var(--mono);
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.18em;
   color: var(--ink-faint);
   text-transform: uppercase;
-  margin-bottom: 10px;
+  margin-bottom: 18px;
+  animation: fade-up 0.8s var(--ease-out) both;
 }
 
-#deck-count { color: #22d3ee; }
+.handle .live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan), 0 0 2px var(--cyan);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+.handle .sep { opacity: 0.35; }
+
+#deck-count { color: var(--cyan); }
 
 .wordmark {
+  position: relative;
   font-family: var(--display);
   font-weight: 700;
-  font-size: clamp(2.1rem, 6.5vw, 3.3rem);
-  letter-spacing: -0.03em;
-  line-height: 1.04;
+  font-size: clamp(2.7rem, 8.2vw, 4.9rem);
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  color: #fff;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55), 0 0 60px rgba(0, 0, 0, 0.5);
+  animation: fade-up 0.9s var(--ease-out) 0.05s both;
 }
 
-.cursor {
-  display: inline-block;
-  width: 0.42ch;
-  height: 0.72em;
-  margin-left: 0.14em;
-  background: #22d3ee;
-  animation: blink 1.15s steps(1) infinite;
+/* one-time chromatic split that converges into the wordmark */
+.wordmark::before,
+.wordmark::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+
+.wordmark::before {
+  color: var(--cyan);
+  animation: split-l 1.15s var(--ease-out) 0.05s both;
+}
+
+.wordmark::after {
+  color: #f472b6;
+  animation: split-r 1.15s var(--ease-out) 0.05s both;
 }
 
 .tagline {
-  margin-top: 10px;
+  margin-top: 16px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+  letter-spacing: -0.005em;
+  line-height: 1.25;
   color: var(--ink-dim);
-  font-size: clamp(0.95rem, 1.6vw, 1.05rem);
-  max-width: 44ch;
+  max-width: 30ch;
+  text-shadow: 0 1px 18px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 0, 0, 0.6);
+  animation: fade-up 0.9s var(--ease-out) 0.18s both;
 }
 
+/* GitHub CTA: rotating conic beam around a dark pill */
 .gh-link {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
   font-family: var(--mono);
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.12em;
-  color: var(--ink-dim);
+  letter-spacing: 0.14em;
+  color: var(--ink);
   text-decoration: none;
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: 999px;
-  padding: 9px 16px;
-  margin-top: 6px;
-  transition: color 0.25s, border-color 0.25s, background-color 0.25s;
+  padding: 11px 18px 11px 16px;
+  margin-bottom: 6px;
+  background:
+    linear-gradient(var(--bg-2), var(--bg-2)) padding-box,
+    conic-gradient(from var(--beam),
+      rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.10) 55%,
+      var(--cyan) 70%, var(--violet) 82%,
+      rgba(255, 255, 255, 0.10) 100%) border-box;
+  box-shadow: 0 10px 30px -14px rgba(34, 211, 238, 0.35);
+  animation: beam 5s linear infinite, fade-up 0.9s var(--ease-out) 0.25s both;
+  transition: box-shadow 0.3s, transform 0.3s var(--ease-out);
 }
 
-.gh-link .ext { font-size: 11px; transition: transform 0.25s; }
+.gh-link .ext { font-size: 11px; color: var(--cyan); transition: transform 0.25s; }
 
 .gh-link:hover,
 .gh-link:focus-visible {
-  color: var(--ink);
-  border-color: rgba(255, 255, 255, 0.28);
-  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 40px -12px rgba(34, 211, 238, 0.55);
 }
 
 .gh-link:hover .ext { transform: translate(2px, -2px); }
+
+.gh-link:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 
 /* ---- Deck: asymmetric bento grid ---------------------------------------- */
 
 .deck {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 14px;
+  gap: 12px;
 }
 
 @media (min-width: 560px) and (max-width: 899.98px) {
@@ -175,54 +268,129 @@ body {
   .tile:nth-child(6) { grid-column: span 2; }
 }
 
-/* ---- Tiles ---------------------------------------------------------------- */
+/* ---- Glass panels (tiles + star rows share the spotlight system) ------- */
 
-.tile {
+.tile,
+.star-item {
+  --mx: 50%;
+  --my: 50%;
+  --spot: 0;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  min-height: 190px;
-  padding: clamp(18px, 2.5vw, 24px);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: linear-gradient(160deg, var(--panel), var(--panel-deep));
-  overflow: hidden;
+  background: linear-gradient(160deg, var(--glass), var(--glass-deep));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 24px 60px -34px rgba(0, 0, 0, 0.9);
   text-decoration: none;
   color: var(--ink);
-  animation: rise 0.6s ease both;
-  transition: transform 0.28s cubic-bezier(0.2, 0.7, 0.2, 1),
-              border-color 0.28s, box-shadow 0.28s;
+  overflow: hidden;
 }
 
-/* Accent bloom (resting glow on live tiles; blooms on hover/focus) */
-.tile::before {
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  @media (min-width: 700px) {
+    .tile,
+    .star-item {
+      -webkit-backdrop-filter: blur(18px) saturate(1.5);
+      backdrop-filter: blur(18px) saturate(1.5);
+    }
+  }
+}
+
+/* spotlight ring: accent light on the border nearest the pointer */
+.tile::before,
+.star-item::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: radial-gradient(260px circle at var(--mx) var(--my), var(--accent) 0%, transparent 62%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: var(--spot);
+  transition: opacity 0.25s;
+  z-index: 2;
+}
+
+/* spotlight fill: soft accent wash inside the panel */
+.tile::after,
+.star-item::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(440px 200px at 85% -12%, var(--accent-faint), transparent 72%);
-  opacity: 0;
-  transition: opacity 0.35s;
+  border-radius: inherit;
   pointer-events: none;
+  background: radial-gradient(420px circle at var(--mx) var(--my), var(--accent-faint), transparent 60%);
+  opacity: var(--spot);
+  transition: opacity 0.25s;
+  z-index: 0;
 }
 
-.is-live::before { opacity: 0.5; }
+.tile > *,
+.star-item > * { position: relative; z-index: 1; }
+
+/* ---- Tiles ---------------------------------------------------------------- */
+
+.tile {
+  --rx: 0deg;
+  --ry: 0deg;
+  --tx: 0px;
+  --ty: 0px;
+  --s: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 210px;
+  padding: clamp(20px, 2.6vw, 26px);
+  border-radius: var(--radius);
+  transform: perspective(1000px) rotateX(var(--rx)) rotateY(var(--ry)) scale(var(--s));
+  transform-style: preserve-3d;
+  transition: transform 0.55s var(--ease-out), border-color 0.3s, box-shadow 0.3s;
+  animation: tile-in 0.9s var(--ease-out) both;
+  animation-delay: calc(240ms + var(--i, 0) * 70ms);
+  animation-fill-mode: backwards;
+}
+
+.tile.is-tilting { transition: transform 0.09s linear, border-color 0.3s, box-shadow 0.3s; }
 
 a.tile:hover,
 a.tile:focus-visible {
-  transform: translateY(-4px);
+  --s: 1.012;
   border-color: var(--accent-dim);
   box-shadow:
-    0 14px 44px -14px var(--accent-dim),
-    0 2px 10px rgba(0, 0, 0, 0.45);
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    0 30px 80px -30px var(--accent-dim),
+    0 2px 12px rgba(0, 0, 0, 0.5);
 }
-
-a.tile:hover::before,
-a.tile:focus-visible::before { opacity: 1; }
 
 a.tile:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
+
+/* large watermark glyph, parallaxes against the tilt */
+.tile .mark {
+  position: absolute;
+  right: -22px;
+  bottom: -26px;
+  width: 170px;
+  height: 170px;
+  color: var(--accent);
+  opacity: 0.075;
+  z-index: 0;
+  pointer-events: none;
+  transform: translate(var(--tx), var(--ty)) rotate(-8deg);
+  transition: opacity 0.35s, transform 0.55s var(--ease-out);
+}
+
+.tile.is-tilting .mark { transition: opacity 0.35s, transform 0.09s linear; }
+
+a.tile:hover .mark,
+a.tile:focus-visible .mark { opacity: 0.16; }
+
+.tile .mark svg { width: 100%; height: 100%; stroke-width: 1.1; }
 
 /* ---- Tile internals -------------------------------------------------------- */
 
@@ -231,21 +399,31 @@ a.tile:focus-visible {
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .glyph {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
-  border: 1px solid var(--line);
-  border-radius: 11px;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--accent-dim);
+  border-radius: 13px;
   color: var(--accent);
   background:
-    radial-gradient(60px 40px at 30% 20%, var(--accent-faint), transparent 75%),
+    radial-gradient(70px 46px at 30% 20%, var(--accent-faint), transparent 75%),
     rgba(255, 255, 255, 0.02);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 0 0 var(--accent-faint);
+  transition: box-shadow 0.35s, transform 0.35s var(--ease-out);
+}
+
+.glyph svg { width: 24px; height: 24px; filter: drop-shadow(0 0 6px var(--accent-faint)); }
+
+a.tile:hover .glyph,
+a.tile:focus-visible .glyph {
+  transform: translateY(-1px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 0 6px var(--accent-faint);
 }
 
 .chip {
@@ -273,7 +451,7 @@ a.tile:focus-visible {
   height: 6px;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 7px var(--accent);
+  box-shadow: 0 0 8px var(--accent);
   animation: pulse 2.4s ease-in-out infinite;
 }
 
@@ -286,25 +464,26 @@ a.tile:focus-visible {
   font-family: var(--mono);
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   color: var(--accent);
-  margin-bottom: 6px;
+  margin-bottom: 7px;
 }
 
 .subject {
   font-family: var(--display);
   font-weight: 700;
-  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
-  letter-spacing: -0.015em;
-  line-height: 1.12;
-  margin-bottom: 8px;
+  font-size: clamp(1.4rem, 2.3vw, 1.75rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 9px;
+  color: #fff;
 }
 
 .blurb {
   color: var(--ink-dim);
-  font-size: 0.92rem;
-  max-width: 48ch;
-  margin-bottom: 18px;
+  font-size: 0.93rem;
+  max-width: 46ch;
+  margin-bottom: 20px;
 }
 
 .tile-meta {
@@ -326,13 +505,24 @@ a.tile:focus-visible {
 }
 
 .tile-meta .arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
   color: var(--accent);
   font-size: 14px;
-  transition: transform 0.25s;
+  transition: transform 0.3s var(--ease-out), border-color 0.3s, background-color 0.3s;
 }
 
 a.tile:hover .arrow,
-a.tile:focus-visible .arrow { transform: translate(3px, -3px); }
+a.tile:focus-visible .arrow {
+  transform: translate(2px, -2px);
+  border-color: var(--accent-dim);
+  background: var(--accent-faint);
+}
 
 /* ---- Coming-soon treatment -------------------------------------------------- */
 
@@ -340,36 +530,25 @@ a.tile:focus-visible .arrow { transform: translate(3px, -3px); }
   border-style: dashed;
   background:
     repeating-linear-gradient(-45deg, transparent 0 9px, rgba(255, 255, 255, 0.014) 9px 10px),
-    linear-gradient(160deg, var(--panel-deep), #0b0d11);
+    linear-gradient(160deg, var(--glass-deep), rgba(9, 10, 14, 0.8));
 }
 
 .is-soon .glyph,
-.is-soon .tag { opacity: 0.62; }
+.is-soon .tag,
+.is-soon .mark { opacity: 0.5; }
 
 .is-soon .subject { color: var(--ink-dim); }
 
 .is-soon .blurb,
 .is-soon .tile-meta { color: var(--ink-faint); opacity: 0.85; }
 
-/* shimmer sweep */
-.is-soon::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(115deg, transparent 42%, rgba(255, 255, 255, 0.05) 50%, transparent 58%);
-  transform: translateX(-105%);
-  animation: sweep 5s ease-in-out 2.2s infinite;
-  pointer-events: none;
-}
-
 /* ---- Star the source ---------------------------------------------------------- */
 
 .starline {
-  margin-top: clamp(30px, 5vw, 46px);
-  padding-top: clamp(24px, 4vw, 34px);
+  margin-top: clamp(34px, 5vw, 52px);
+  padding-top: clamp(24px, 4vw, 36px);
   border-top: 1px solid var(--line);
-  animation: rise 0.6s ease both;
-  animation-delay: 0.5s;
+  animation: fade-up 0.8s var(--ease-out) 0.7s both;
 }
 
 .starline-head {
@@ -387,7 +566,7 @@ a.tile:focus-visible .arrow { transform: translate(3px, -3px); }
   font-family: var(--mono);
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #fbbf24;
 }
@@ -395,10 +574,12 @@ a.tile:focus-visible .arrow { transform: translate(3px, -3px); }
 .starline-title svg { filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.5)); }
 
 .starline-sub {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.15rem;
   color: var(--ink-dim);
-  font-size: 0.92rem;
-  max-width: 62ch;
-  margin-bottom: 18px;
+  max-width: 58ch;
+  margin-bottom: 20px;
 }
 
 .star-grid {
@@ -416,21 +597,17 @@ a.tile:focus-visible .arrow { transform: translate(3px, -3px); }
   align-items: center;
   gap: 13px;
   padding: 13px 16px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: linear-gradient(160deg, var(--panel), var(--panel-deep));
-  text-decoration: none;
-  color: var(--ink);
-  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1),
-              border-color 0.25s, box-shadow 0.25s;
+  border-radius: 13px;
+  transition: transform 0.3s var(--ease-out), border-color 0.3s, box-shadow 0.3s;
 }
 
 .star-item:hover,
 .star-item:focus-visible {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   border-color: var(--accent-dim);
   box-shadow:
-    0 12px 34px -16px var(--accent-dim),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 16px 40px -20px var(--accent-dim),
     0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
@@ -450,7 +627,10 @@ a.tile:focus-visible .arrow { transform: translate(3px, -3px); }
   color: #fbbf24;
   border: 1px solid rgba(251, 191, 36, 0.22);
   background: rgba(251, 191, 36, 0.08);
+  transition: transform 0.3s var(--ease-out);
 }
+
+.star-item:hover .star-ic { transform: rotate(-12deg) scale(1.06); }
 
 .star-txt {
   display: flex;
@@ -505,12 +685,13 @@ a.tile:focus-visible .arrow { transform: translate(3px, -3px); }
   justify-content: center;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: clamp(36px, 6vw, 56px);
+  margin-top: clamp(40px, 6vw, 64px);
   font-family: var(--mono);
   font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   color: var(--ink-faint);
+  animation: fade-up 0.8s var(--ease-out) 0.9s both;
 }
 
 .site-footer .sep { opacity: 0.4; }
@@ -526,7 +707,7 @@ a.tile:focus-visible .arrow { transform: translate(3px, -3px); }
 .site-footer a:hover,
 .site-footer a:focus-visible { color: var(--ink); border-color: var(--ink-dim); }
 
-.site-footer a:focus-visible { outline: 2px solid #22d3ee; outline-offset: 3px; }
+.site-footer a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 
 /* ---- No-JS fallback ------------------------------------------------------------ */
 
@@ -536,18 +717,34 @@ a.tile:focus-visible .arrow { transform: translate(3px, -3px); }
   gap: 10px;
 }
 
-.noscript-list a { color: #22d3ee; }
+.noscript-list a { color: var(--cyan); }
 
 /* ---- Motion ---------------------------------------------------------------------- */
 
-@keyframes rise {
-  from { opacity: 0; transform: translateY(16px); }
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes blink {
-  0%, 55% { opacity: 1; }
-  56%, 100% { opacity: 0; }
+@keyframes tile-in {
+  from { opacity: 0; transform: perspective(1000px) translateY(18px) scale(0.975); filter: blur(8px); }
+  to   { opacity: 1; transform: perspective(1000px) translateY(0) scale(1); filter: blur(0); }
+}
+
+@keyframes split-l {
+  0%   { opacity: 0.85; transform: translate(-18px, 0); }
+  60%  { opacity: 0.55; }
+  100% { opacity: 0; transform: translate(0, 0); }
+}
+
+@keyframes split-r {
+  0%   { opacity: 0.85; transform: translate(18px, 0); }
+  60%  { opacity: 0.55; }
+  100% { opacity: 0; transform: translate(0, 0); }
+}
+
+@keyframes beam {
+  to { --beam: 360deg; }
 }
 
 @keyframes pulse {
@@ -555,15 +752,11 @@ a.tile:focus-visible .arrow { transform: translate(3px, -3px); }
   50% { opacity: 0.4; }
 }
 
-@keyframes sweep {
-  0% { transform: translateX(-105%); }
-  55%, 100% { transform: translateX(105%); }
-}
-
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation: none !important;
     transition: none !important;
   }
-  a.tile:hover, a.tile:focus-visible { transform: none; }
+  .tile { transform: none !important; }
+  .wordmark::before, .wordmark::after { display: none; }
 }

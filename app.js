@@ -146,7 +146,8 @@ tools.forEach((tool, i) => {
   el.style.setProperty('--accent', tool.accent);
   el.style.setProperty('--accent-dim', `rgba(${r},${g},${b},.45)`);
   el.style.setProperty('--accent-faint', `rgba(${r},${g},${b},.13)`);
-  el.style.animationDelay = `${140 + i * 80}ms`;
+  el.style.setProperty('--i', i);
+  el.dataset.accent = tool.accent;
 
   if (live) {
     el.href = tool.url;
@@ -156,6 +157,7 @@ tools.forEach((tool, i) => {
   }
 
   el.innerHTML = `
+    <span class="mark" aria-hidden="true">${glyphs[tool.glyph]}</span>
     <div class="tile-top">
       <span class="glyph">${glyphs[tool.glyph]}</span>
       ${live
@@ -225,6 +227,7 @@ if (starline) {
     a.style.setProperty('--accent', r.accent);
     a.style.setProperty('--accent-dim', `rgba(${rr},${gg},${bb},.45)`);
     a.style.setProperty('--accent-faint', `rgba(${rr},${gg},${bb},.13)`);
+    a.dataset.accent = r.accent;
 
     a.innerHTML = `
       <span class="star-ic">${STAR_ICON}</span>
@@ -239,3 +242,94 @@ if (starline) {
 
   grid.appendChild(starFrag);
 }
+
+/* ==========================================================================
+   Interaction — spotlight borders, tilt, and the Signal accent hook.
+   Every panel (.tile, .star-item) gets --mx/--my (pointer, local px) and
+   --spot (0..1 by distance), so borders light up near the cursor across
+   the whole grid. Hovering a panel also asks signal.js to re-tint the
+   ribbon field toward that subject's accent and bloom behind the panel.
+   ========================================================================== */
+
+(function () {
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const panels = Array.from(document.querySelectorAll('.tile, .star-item'));
+  if (!panels.length) return;
+
+  /* -- spotlight: one rAF per pointer move, reads before writes -- */
+  let pending = null;
+
+  function paint() {
+    const e = pending;
+    pending = null;
+    const rects = panels.map((el) => el.getBoundingClientRect());
+    panels.forEach((el, i) => {
+      const r = rects[i];
+      const dx = Math.max(r.left - e.x, 0, e.x - r.right);
+      const dy = Math.max(r.top - e.y, 0, e.y - r.bottom);
+      const spot = Math.max(0, 1 - Math.hypot(dx, dy) / 240);
+      el.style.setProperty('--mx', (e.x - r.left) + 'px');
+      el.style.setProperty('--my', (e.y - r.top) + 'px');
+      el.style.setProperty('--spot', spot.toFixed(3));
+    });
+  }
+
+  if (fine) {
+    window.addEventListener('pointermove', (e) => {
+      const first = !pending;
+      pending = { x: e.clientX, y: e.clientY };
+      if (first) requestAnimationFrame(paint);
+    }, { passive: true });
+  }
+
+  /* -- accent hook + tilt -- */
+  function focusOn(el) {
+    if (!window.Signal || !el.dataset.accent) return;
+    const r = el.getBoundingClientRect();
+    window.Signal.setAccent(
+      el.dataset.accent,
+      (r.left + r.width / 2) / Math.max(1, window.innerWidth),
+      1 - (r.top + r.height / 2) / Math.max(1, window.innerHeight)
+    );
+  }
+
+  function focusOff() {
+    if (window.Signal) window.Signal.clearAccent();
+  }
+
+  panels.forEach((el) => {
+    const tilts = fine && !reduce && el.classList.contains('tile') && el.tagName === 'A';
+
+    el.addEventListener('pointerenter', () => {
+      focusOn(el);
+      if (tilts) el.classList.add('is-tilting');
+    });
+
+    el.addEventListener('focusin', () => focusOn(el));
+    el.addEventListener('focusout', focusOff);
+
+    if (tilts) {
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        el.style.setProperty('--ry', (px * 6).toFixed(2) + 'deg');
+        el.style.setProperty('--rx', (-py * 6).toFixed(2) + 'deg');
+        el.style.setProperty('--tx', (px * -14).toFixed(1) + 'px');
+        el.style.setProperty('--ty', (py * -14).toFixed(1) + 'px');
+      }, { passive: true });
+    }
+
+    el.addEventListener('pointerleave', () => {
+      focusOff();
+      if (tilts) {
+        el.classList.remove('is-tilting');
+        el.style.setProperty('--rx', '0deg');
+        el.style.setProperty('--ry', '0deg');
+        el.style.setProperty('--tx', '0px');
+        el.style.setProperty('--ty', '0px');
+      }
+    });
+  });
+})();

@@ -5,6 +5,22 @@ One shareable URL instead of one link at a time: **https://adirbuskila.github.io
 
 Hand-rolled static site — no framework, no build step, no dependencies.
 
+## The look
+
+The background is a live WebGL "signal": ribbons of light resolved through a
+7px LED dot matrix, ported to dependency-free WebGL in [`signal.js`](signal.js)
+from ThreeUI's *Ribbon Field* ([MengTo/threeui](https://github.com/MengTo/threeui), MIT)
+and extended so the page reacts to what you hover — the ribbons re-tint to that
+subject's accent and a bloom drifts behind the tile. Tiles are frosted glass over
+it with a shared pointer spotlight on their borders.
+
+- No WebGL → `html.no-signal`, falls back to the CSS backdrop.
+- `prefers-reduced-motion` → one static frame, no CSS motion.
+- Pointer/tilt/spotlight only run on `(hover: hover) and (pointer: fine)`.
+- Layering gotcha: the canvas sits at `z-index: 0` under `.page { z-index: 1 }`,
+  *not* at a negative z-index — Chrome leaves negative-z root layers out of the
+  backdrop that `backdrop-filter` samples, so the glass would stop blurring it.
+
 ## Launching a new tool
 
 Everything is driven by the `tools` array at the top of [`app.js`](app.js).
@@ -49,9 +65,15 @@ doesn't appear within a minute). Existing project pages
 
 ```
 & "C:\Program Files\Google\Chrome\Application\chrome.exe" --headless=new --disable-gpu `
-  --hide-scrollbars --window-size=1200,630 --virtual-time-budget=8000 `
+  --enable-unsafe-swiftshader --force-prefers-reduced-motion `
+  --hide-scrollbars --window-size=1200,630 --virtual-time-budget=9000 `
   --screenshot="og.png" "file:///$PWD/og-template.html".Replace('\','/')
 ```
+
+`--enable-unsafe-swiftshader` gives headless Chrome a WebGL context for the
+signal background; `--force-prefers-reduced-motion` makes `signal.js` draw one
+deterministic frame instead of running its rAF loop (which would otherwise eat
+the virtual-time budget and freeze CSS animations at frame 0).
 
 Edit the template, re-run, commit. Note: OG images are cached hard by
 WhatsApp/LinkedIn — use their debuggers (e.g. LinkedIn Post Inspector) to bust it.

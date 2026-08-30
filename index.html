@@ -33,7 +33,7 @@
   <!-- Fonts: display + mono only; body uses the system sans stack -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css">
 
@@ -50,13 +50,14 @@
   </script>
 </head>
 <body>
+  <canvas id="signal" aria-hidden="true"></canvas>
   <div class="backdrop" aria-hidden="true"></div>
 
   <div class="page">
     <header class="site-header">
       <div class="id-block">
-        <p class="handle">@AdirBuskila&ensp;·&ensp;<span id="deck-count">STUDY TOOLS DECK</span></p>
-        <h1 class="wordmark">Adir Buskila<span class="cursor" aria-hidden="true"></span></h1>
+        <p class="handle"><span class="live-dot" aria-hidden="true"></span><span id="deck-count">STUDY TOOLS DECK</span><span class="sep" aria-hidden="true">·</span>@AdirBuskila</p>
+        <h1 class="wordmark" data-text="Adir Buskila">Adir Buskila</h1>
         <p class="tagline">Tools I build for CS exam prep — free, interactive, in the browser.</p>
       </div>
       <a class="gh-link" href="https://github.com/AdirBuskila" target="_blank" rel="noopener">
@@ -102,6 +103,7 @@
     </footer>
   </div>
 
+  <script src="signal.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

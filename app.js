@@ -77,6 +77,16 @@ const tools = [
     accent: '#a3e635',
     glyph: 'automaton',
   },
+  {
+    subject: 'Computability',
+    tag: 'REDUCTION LAB',
+    blurb: 'R, RE, coRE, mapping and poly-time reductions, NP-completeness — 427 past-exam questions with the official proofs, plus a 13-chapter study mode.',
+    status: 'live',
+    url: 'https://adirbuskila.github.io/computability-quiz/',
+    repo: 'https://github.com/AdirBuskila/computability-quiz',
+    accent: '#fb923c',
+    glyph: 'sigma',
+  },
 ];
 
 /* ==========================================================================
@@ -131,6 +141,11 @@ const glyphs = {
     '<path d="M4 12c0 1.5 3.6 2.7 8 2.7s8-1.2 8-2.7"/></svg>',
 
   // Automata — start arrow, a state with a self-loop, a transition into an accepting state
+  // Computability — Sigma-star: the set of all strings, home of every language
+  sigma: SVG_OPEN + '<title>Sigma star</title>' +
+    '<path d="M15.5 5H5l5.8 7L5 19h10.5"/>' +
+    '<path d="M19.5 2.2v4"/><path d="m17.8 3.2 3.4 2"/><path d="m17.8 5.2 3.4-2"/></svg>',
+
   automaton: SVG_OPEN + '<title>Finite automaton</title>' +
     '<path d="M1.5 14h2.3"/><path d="m2.9 12.8 1.2 1.2-1.2 1.2"/>' +
     '<circle cx="7.5" cy="14" r="3.2"/>' +

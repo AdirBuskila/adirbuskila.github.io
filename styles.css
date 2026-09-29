@@ -252,19 +252,21 @@ body {
   gap: 12px;
 }
 
-/* 7 tiles: wide hero on top, then three even pairs */
+/* 8 tiles: wide hero on top, three even pairs, wide closer */
 @media (min-width: 560px) and (max-width: 899.98px) {
   .deck { grid-template-columns: 1fr 1fr; }
-  .tile:nth-child(1) { grid-column: span 2; }
+  .tile:nth-child(1),
+  .tile:nth-child(8) { grid-column: span 2; }
 }
 
-/* 7 tiles: two hero rows (1 + 3 wide, 2 tall on the side), then a 2×2 block (4–7) */
+/* 8 tiles: two hero rows (1 + 3 wide, 2 tall on the side), a pair (4–5), then a row of three (6–8) */
 @media (min-width: 900px) {
   .deck { grid-template-columns: repeat(6, 1fr); }
   .tile:nth-child(1) { grid-column: span 4; }
   .tile:nth-child(2) { grid-column: span 2; grid-row: span 2; }
   .tile:nth-child(3) { grid-column: span 4; }
   .tile:nth-child(n+4) { grid-column: span 3; }
+  .tile:nth-child(n+6) { grid-column: span 2; }
 }
 
 /* ---- Glass panels (tiles + star rows share the spotlight system) ------- */

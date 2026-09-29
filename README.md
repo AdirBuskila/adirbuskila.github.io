@@ -1,5 +1,7 @@
 # CS Study Tools Deck
 
+[![CS Study Tools Deck — link-preview card](og.png)](https://adirbuskila.github.io/)
+
 Personal launch hub for the exam-prep web apps I build for computer-science students.
 One shareable URL instead of one link at a time: **https://adirbuskila.github.io/**
 
@@ -32,8 +34,9 @@ url: '',         →  url: 'https://your-new-tool.example/',
 ```
 
 That's the whole change — the tile becomes a real link, the chip flips to LIVE,
-and the header counter updates. Zero layout edits. Adding a seventh subject is
-just appending another object to the array.
+and the header counter updates. Zero layout edits. Adding another subject is
+appending an object to the array (plus a glyph, and the bento `nth-child` spans in
+`styles.css` if the tile count changes the grid).
 
 ## Run locally
 

@@ -38,9 +38,10 @@
   .url { font-size: 19px; font-weight: 600; letter-spacing: .1em; color: #737b88; margin-top: 46px; }
   .url b { color: #eceef4; font-weight: 600; }
 
-  .tiles { display: grid; grid-template-columns: 236px 236px; gap: 14px; }
+  .tiles { display: grid; grid-template-columns: 236px 236px; gap: 12px; }
+  .tile.wide { grid-column: span 2; }
   .tile {
-    position: relative; height: 128px; padding: 18px 20px; border-radius: 18px; overflow: hidden;
+    position: relative; height: 104px; padding: 15px 20px; border-radius: 18px; overflow: hidden;
     border: 1px solid var(--ad);
     background: linear-gradient(160deg, rgba(21,23,31,.68), rgba(9,10,14,.78));
     -webkit-backdrop-filter: blur(18px) saturate(1.5); backdrop-filter: blur(18px) saturate(1.5);
@@ -67,7 +68,7 @@
 
 <div class="card">
   <div class="left">
-    <div class="handle mono"><span class="dot"></span><b>6 LIVE</b><span class="sep">·</span>@ADIRBUSKILA</div>
+    <div class="handle mono"><span class="dot"></span><b>7 LIVE</b><span class="sep">·</span>@ADIRBUSKILA</div>
     <div class="name">Adir Buskila</div>
     <div class="sub">Tools I build for CS exam prep — free, interactive, in the browser.</div>
     <div class="url mono"><b>adirbuskila.github.io</b></div>
@@ -96,6 +97,10 @@
     <div class="tile" style="--a:#60a5fa; --ad:rgba(96,165,250,.45); --af:rgba(96,165,250,.13)">
       <div class="row"><span class="tag mono">QUERY GYM</span><span class="chip mono"><span class="dot"></span>LIVE</span></div>
       <div class="t">Databases</div>
+    </div>
+    <div class="tile wide" style="--a:#a3e635; --ad:rgba(163,230,53,.45); --af:rgba(163,230,53,.13)">
+      <div class="row"><span class="tag mono">LANGUAGE LAB</span><span class="chip mono"><span class="dot"></span>LIVE</span></div>
+      <div class="t">Automata</div>
     </div>
   </div>
 </div>

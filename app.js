@@ -67,6 +67,16 @@ const tools = [
     accent: '#60a5fa',
     glyph: 'stack',
   },
+  {
+    subject: 'Automata',
+    tag: 'LANGUAGE LAB',
+    blurb: 'DFA, NFA, PDA, Nerode and the pumping lemma — 349 past-exam questions with the original diagrams, plus an 11-chapter study mode.',
+    status: 'live',
+    url: 'https://adirbuskila.github.io/automata-quiz/',
+    repo: 'https://github.com/AdirBuskila/automata-quiz',
+    accent: '#a3e635',
+    glyph: 'automaton',
+  },
 ];
 
 /* ==========================================================================
@@ -119,6 +129,14 @@ const glyphs = {
     '<ellipse cx="12" cy="5.5" rx="8" ry="2.7"/>' +
     '<path d="M4 5.5v13c0 1.5 3.6 2.7 8 2.7s8-1.2 8-2.7v-13"/>' +
     '<path d="M4 12c0 1.5 3.6 2.7 8 2.7s8-1.2 8-2.7"/></svg>',
+
+  // Automata — start arrow, a state with a self-loop, a transition into an accepting state
+  automaton: SVG_OPEN + '<title>Finite automaton</title>' +
+    '<path d="M1.5 14h2.3"/><path d="m2.9 12.8 1.2 1.2-1.2 1.2"/>' +
+    '<circle cx="7.5" cy="14" r="3.2"/>' +
+    '<path d="M5.6 11.4c-.9-3.6 4.7-3.6 3.8 0" opacity=".75"/><path d="m8.6 10.5.8.9.9-.7" opacity=".75"/>' +
+    '<path d="M10.9 14h4.6"/><path d="m14.2 12.7 1.3 1.3-1.3 1.3"/>' +
+    '<circle cx="19" cy="14" r="3.2"/><circle cx="19" cy="14" r="1.7"/></svg>',
 };
 
 /* ==========================================================================

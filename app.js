@@ -80,7 +80,7 @@ const tools = [
   {
     subject: 'Computability',
     tag: 'REDUCTION LAB',
-    blurb: 'R, RE, coRE, mapping and poly-time reductions, NP-completeness — 427 past-exam questions with the official proofs, plus a 13-chapter study mode.',
+    blurb: 'R, RE, coRE, mapping and poly-time reductions, NP-completeness — 592 past-exam questions with worked proofs, plus a 13-chapter study mode.',
     status: 'live',
     url: 'https://adirbuskila.github.io/computability-quiz/',
     repo: 'https://github.com/AdirBuskila/computability-quiz',

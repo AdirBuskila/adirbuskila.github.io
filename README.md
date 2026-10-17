@@ -33,10 +33,18 @@ status: 'soon',  →  status: 'live',
 url: '',         →  url: 'https://your-new-tool.example/',
 ```
 
-That's the whole change — the tile becomes a real link, the chip flips to LIVE,
-and the header counter updates. Zero layout edits. Adding another subject is
-appending an object to the array (plus a glyph, and the bento `nth-child` spans in
-`styles.css` if the tile count changes the grid).
+### The lab
+
+Courses still being built sit in the config as `status: 'soon'` entries with just
+`subject`, `nameHe`, `year` (1 or 2) and `accent`. They render as compact tiles in
+the "In the lab" section below the deck, grouped by year, and the header counter
+reads "N LIVE · M IN THE LAB". To launch one, flip it to `status: 'live'` and add
+`tag`, `blurb`, `glyph` (plus a new glyph in the `glyphs` map), `url` and `repo`.
+It then leaves the lab and joins the bento deck automatically.
+
+The deck's grid rules (`.deck > .tile:nth-child` in `styles.css`) are tuned for
+exactly 8 live tiles, so a 9th live tile means re-tuning them. The lab grid is
+generic and needs no changes.
 
 ## Run locally
 

@@ -1,9 +1,14 @@
 /* ==========================================================================
    TOOLS CONFIG — the only thing you ever need to edit.
 
-   To launch a pending tool: change  status: 'soon'  →  status: 'live'
-   and paste its url. That's it — layout, chips, links and the header
-   counter all update themselves.
+   Live tools fill the bento deck; status: 'soon' entries (subject, nameHe,
+   year, accent only) render as compact tiles in the "In the lab" section.
+
+   To launch a lab course: flip it to status: 'live' and fill in tag, blurb,
+   glyph (add one to the glyphs map), url and repo. It then moves into the
+   deck automatically and the header counter updates. NOTE: the deck's bento
+   grid rules in styles.css (.deck > .tile:nth-child) are tuned for exactly
+   8 tiles, so a 9th+ live tile means re-tuning them.
    ========================================================================== */
 
 const tools = [
@@ -87,6 +92,22 @@ const tools = [
     accent: '#fb923c',
     glyph: 'sigma',
   },
+
+  // --- In the lab: courses being built (year 1, then year 2) ---
+  { subject: 'Linear Algebra', glyph: 'matrix', nameHe: 'אלגברה ליניארית', year: 1, status: 'soon', accent: '#818cf8' },
+  { subject: 'Discrete Math 1', glyph: 'venn', nameHe: 'בדידה 1', year: 1, status: 'soon', accent: '#f472b6' },
+  { subject: 'Intro to CS', glyph: 'prompt', nameHe: 'מבוא למדעי המחשב', year: 1, status: 'soon', accent: '#4ade80' },
+  { subject: 'Intro to Computer Systems', glyph: 'chip', nameHe: 'מבוא למערכות מחשב', year: 1, status: 'soon', accent: '#94a3b8' },
+  { subject: 'Calculus 1', glyph: 'integral', nameHe: 'אינפי 1', year: 1, status: 'soon', accent: '#f87171' },
+  { subject: 'Discrete Math 2', glyph: 'tree', nameHe: 'בדידה 2', year: 1, status: 'soon', accent: '#e879f9' },
+  { subject: 'Data Structures', glyph: 'heap', nameHe: 'מבני נתונים', year: 1, status: 'soon', accent: '#2dd4bf' },
+  { subject: 'Advanced Programming Workshop', glyph: 'pointer', nameHe: 'סדנה מתקדמת בתכנות', year: 1, status: 'soon', accent: '#facc15' },
+  { subject: 'Object-Oriented Programming', glyph: 'classes', nameHe: 'תכנות מונחה עצמים', year: 1, status: 'soon', accent: '#38bdf8' },
+  { subject: 'Calculus 2', glyph: 'surface', nameHe: 'אינפי 2', year: 2, status: 'soon', accent: '#fca5a5' },
+  { subject: 'Algorithms 1', glyph: 'sort', nameHe: 'אלגוריתמים 1', year: 2, status: 'soon', accent: '#c4b5fd' },
+  { subject: 'Computer Networks', glyph: 'globe', nameHe: 'רשתות תקשורת מחשבים', year: 2, status: 'soon', accent: '#67e8f9' },
+  { subject: 'Probability', glyph: 'dice', nameHe: 'הסתברות', year: 2, status: 'soon', accent: '#fdba74' },
+  { subject: 'Algebra 2', glyph: 'group', nameHe: 'אלגברה 2', year: 2, status: 'soon', accent: '#f0abfc' },
 ];
 
 /* ==========================================================================
@@ -152,6 +173,49 @@ const glyphs = {
     '<path d="M5.6 11.4c-.9-3.6 4.7-3.6 3.8 0" opacity=".75"/><path d="m8.6 10.5.8.9.9-.7" opacity=".75"/>' +
     '<path d="M10.9 14h4.6"/><path d="m14.2 12.7 1.3 1.3-1.3 1.3"/>' +
     '<circle cx="19" cy="14" r="3.2"/><circle cx="19" cy="14" r="1.7"/></svg>',
+
+  // --- In the lab glyphs (course tiles; reused when the course launches) ---
+  matrix: SVG_OPEN + '<title>Matrix</title>' +
+    '<path d="M8 4H4.5v16H8"/><path d="M16 4h3.5v16H16"/><circle cx="9.6" cy="9" r="1.4" fill="currentColor" stroke="none"/><circle cx="14.4" cy="9" r="1.4" fill="currentColor" stroke="none"/><circle cx="9.6" cy="15" r="1.4" fill="currentColor" stroke="none"/><circle cx="14.4" cy="15" r="1.4" fill="currentColor" stroke="none"/></svg>',
+
+  venn: SVG_OPEN + '<title>Overlapping sets</title>' +
+    '<circle cx="8.8" cy="12" r="5.8"/><circle cx="15.2" cy="12" r="5.8"/><path d="M12 7.2A5.8 5.8 0 0 1 12 16.8 5.8 5.8 0 0 1 12 7.2Z" fill="currentColor" stroke="none" opacity=".5"/></svg>',
+
+  prompt: SVG_OPEN + '<title>Terminal prompt</title>' +
+    '<rect x="2.5" y="4.5" width="19" height="15" rx="3"/><path d="m7 9.5 3 2.5-3 2.5"/><path d="M12.5 15h4.5"/></svg>',
+
+  chip: SVG_OPEN + '<title>CPU chip</title>' +
+    '<rect x="6.5" y="6.5" width="11" height="11" rx="2"/><rect x="10" y="10" width="4" height="4" rx=".6" fill="currentColor" stroke="none"/><path d="M9.7 3v3.5M14.3 3v3.5M9.7 17.5V21M14.3 17.5V21M3 9.7h3.5M3 14.3h3.5M17.5 9.7H21M17.5 14.3H21"/></svg>',
+
+  integral: SVG_OPEN + '<title>Integral under a curve</title>' +
+    '<path d="M12.6 3.6c-1.9 0-2.3 1.3-2.5 3.2l-.7 10.4c-.2 1.9-.7 3.2-2.7 3.2"/><path d="M13.6 17.4c2.2-.3 3.2-5 7-5" opacity=".6"/><path d="M13.6 20.4H21" opacity=".6"/></svg>',
+
+  tree: SVG_OPEN + '<title>Pascal triangle</title>' +
+    '<path d="M12 4.5 3.8 19.5h16.4Z" opacity=".5" stroke-width="1.2"/><circle cx="12" cy="4.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="9.25" cy="9.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="14.75" cy="9.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="6.5" cy="14.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="14.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="17.5" cy="14.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="3.75" cy="19.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="9.25" cy="19.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="14.75" cy="19.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="20.25" cy="19.5" r="1.5" fill="currentColor" stroke="none"/></svg>',
+
+  heap: SVG_OPEN + '<title>Binary heap</title>' +
+    '<path d="M12 5.2 6.5 12.5M12 5.2l5.5 7.3M6.5 12.5 3.8 19.5M6.5 12.5l5.2 7M17.5 12.5l0 7" stroke-width="1.3" opacity=".7"/><rect x="9.7" y="2.9000000000000004" width="4.6" height="4.6" rx="1.1" fill="currentColor" stroke="none"/><rect x="4.2" y="10.2" width="4.6" height="4.6" rx="1.1" fill="currentColor" stroke="none"/><rect x="15.2" y="10.2" width="4.6" height="4.6" rx="1.1" fill="currentColor" stroke="none"/><rect x="1.5" y="17.2" width="4.6" height="4.6" rx="1.1" fill="currentColor" stroke="none"/><rect x="9.399999999999999" y="17.2" width="4.6" height="4.6" rx="1.1" fill="currentColor" stroke="none"/><rect x="15.2" y="17.2" width="4.6" height="4.6" rx="1.1" fill="currentColor" stroke="none"/></svg>',
+
+  pointer: SVG_OPEN + '<title>Pointer into memory</title>' +
+    '<rect x="2.5" y="14.5" width="19" height="6" rx="1.6"/><path d="M8.83 14.5v6M15.17 14.5v6"/><rect x="9.7" y="15.4" width="4.6" height="4.2" rx=".6" fill="currentColor" stroke="none" opacity=".6"/><circle cx="5" cy="5" r="1.7" fill="currentColor" stroke="none"/><path d="M6.4 6.6C9 8.6 11 9.8 12 12.6"/><path d="m9.7 11.6 2.3 1.4 1.1-2.5"/></svg>',
+
+  classes: SVG_OPEN + '<title>Class inheritance</title>' +
+    '<rect x="6.5" y="2.5" width="11" height="6" rx="1.4"/><path d="M6.5 5.5h11" opacity=".6"/><path d="M12 9.2 9.8 12.6h4.4Z"/><path d="M12 12.6v1.9M6.2 16v-1.5h11.6V16" opacity=".8"/><rect x="2.5" y="16" width="7.5" height="5.5" rx="1.4"/><rect x="14" y="16" width="7.5" height="5.5" rx="1.4"/></svg>',
+
+  surface: SVG_OPEN + '<title>Surface</title>' +
+    '<path d="M3 7.5c3-3.2 6-3.2 9 0s6 3.2 9 0"/><path d="M3 12.5c3-3.2 6-3.2 9 0s6 3.2 9 0" opacity=".7"/><path d="M3 17.5c3-3.2 6-3.2 9 0s6 3.2 9 0" opacity=".4"/></svg>',
+
+  sort: SVG_OPEN + '<title>Sorting bars</title>' +
+    '<path d="M5 21v-9M9.7 21V8.5M14.3 21v-6M19 21v-3" stroke-width="3"/><path d="M4 4h16m-2.6-2.2L20 4l-2.6 2.2" opacity=".6"/></svg>',
+
+  globe: SVG_OPEN + '<title>Globe</title>' +
+    '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9" opacity=".65"/><path d="M3 12h18" opacity=".5" stroke-width="1.2"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>',
+
+  dice: SVG_OPEN + '<title>Die</title>' +
+    '<rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="8.4" cy="8.4" r="1.4" fill="currentColor" stroke="none"/><circle cx="15.6" cy="8.4" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="8.4" cy="15.6" r="1.4" fill="currentColor" stroke="none"/><circle cx="15.6" cy="15.6" r="1.4" fill="currentColor" stroke="none"/></svg>',
+
+  group: SVG_OPEN + '<title>Rotation symmetry</title>' +
+    '<path d="M12 3.5 19.4 16.3H4.6Z" opacity=".55" stroke-width="1.3"/><circle cx="12" cy="3.5" r="1.7" fill="currentColor" stroke="none"/><circle cx="19.4" cy="16.3" r="1.7" fill="currentColor" stroke="none"/><circle cx="4.6" cy="16.3" r="1.7" fill="currentColor" stroke="none"/><path d="M14.5 10.8A3 3 0 1 1 12 9.2"/><path d="M10.9 8 12.2 9.2 10.9 10.4"/></svg>',
 };
 
 /* ==========================================================================
@@ -170,17 +234,21 @@ function prettyUrl(url) {
 const deck = document.getElementById('deck');
 const frag = document.createDocumentFragment();
 
-tools.forEach((tool, i) => {
-  const live = tool.status === 'live';
+function setAccent(el, accent) {
+  const [r, g, b] = hexToRgb(accent);
+  el.style.setProperty('--accent', accent);
+  el.style.setProperty('--accent-dim', `rgba(${r},${g},${b},.45)`);
+  el.style.setProperty('--accent-faint', `rgba(${r},${g},${b},.13)`);
+  el.dataset.accent = accent;
+}
+
+tools.filter((t) => t.status === 'live').forEach((tool, i) => {
+  const live = true;
   const el = document.createElement(live ? 'a' : 'article');
   el.className = 'tile ' + (live ? 'is-live' : 'is-soon');
 
-  const [r, g, b] = hexToRgb(tool.accent);
-  el.style.setProperty('--accent', tool.accent);
-  el.style.setProperty('--accent-dim', `rgba(${r},${g},${b},.45)`);
-  el.style.setProperty('--accent-faint', `rgba(${r},${g},${b},.13)`);
+  setAccent(el, tool.accent);
   el.style.setProperty('--i', i);
-  el.dataset.accent = tool.accent;
 
   if (live) {
     el.href = tool.url;
@@ -210,6 +278,44 @@ tools.forEach((tool, i) => {
 });
 
 deck.appendChild(frag);
+
+/* ---- The lab: compact tiles for every 'soon' tool, grouped by year ---- */
+
+const soonTools = tools.filter((t) => t.status !== 'live');
+const lab = document.getElementById('lab');
+if (lab && soonTools.length) {
+  lab.innerHTML = `
+    <div class="lab-head">
+      <span class="lab-title">IN THE LAB</span>
+      <span class="lab-count">${soonTools.length} COURSES BUILDING</span>
+    </div>
+    <p class="lab-sub">Every year-1 and year-2 course is on the way. Each lights up here when it goes live.</p>`;
+
+  [...new Set(soonTools.map((t) => t.year))].sort().forEach((year) => {
+    const group = document.createElement('div');
+    group.className = 'lab-group';
+    group.innerHTML = `<p class="lab-year">YEAR ${year}</p><div class="lab-grid"></div>`;
+    const grid = group.querySelector('.lab-grid');
+    soonTools.filter((t) => t.year === year).forEach((tool, j) => {
+      const el = document.createElement('article');
+      el.className = 'tile is-soon tile-mini';
+      setAccent(el, tool.accent);
+      el.style.setProperty('--i', j);
+      el.setAttribute('aria-label', `${tool.subject} — in development`);
+      el.innerHTML = `
+        <span class="mini-glyph" aria-hidden="true">${glyphs[tool.glyph]}</span>
+        <span class="mini-text">
+          <span class="mini-subject"></span>
+          <span class="mini-he" lang="he" dir="rtl"></span>
+        </span>
+        <span class="chip chip-soon">BUILDING</span>`;
+      el.querySelector('.mini-subject').textContent = tool.subject;
+      el.querySelector('.mini-he').textContent = tool.nameHe;
+      grid.appendChild(el);
+    });
+    lab.appendChild(group);
+  });
+}
 
 const liveCount = tools.filter((t) => t.status === 'live').length;
 const soonCount = tools.length - liveCount;

@@ -13,6 +13,12 @@
    Pointer drift comes from window pointermove, so it works with the canvas
    sitting behind everything. Falls back to the CSS backdrop when WebGL is
    unavailable; renders a single frame under prefers-reduced-motion.
+
+   Performance: the shader is full-screen and the glass tiles blur it, so
+   every frame costs a shader pass plus a backdrop blur per tile. A governor
+   watches real frame pacing and steps down: full rate -> 30fps -> still
+   (redrawn only while hover tints ease). Software GL (no GPU) starts still
+   and drops the tile blur via .signal-lite.
    ========================================================================== */
 
 (function () {
@@ -23,13 +29,16 @@
 
   const root = document.documentElement;
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const coarse = matchMedia('(pointer: coarse)').matches;
 
   const gl = canvas.getContext('webgl', {
     alpha: false, antialias: false, depth: false, stencil: false,
     preserveDrawingBuffer: false, powerPreference: 'low-power',
   });
   if (!gl) { root.classList.add('no-signal'); return; }
+
+  const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+  const renderer = String(gl.getParameter(dbg ? dbg.UNMASKED_RENDERER_WEBGL : gl.RENDERER));
+  const software = /swiftshader|basic render|llvmpipe|softpipe|software/i.test(renderer);
 
   const VERT = 'attribute vec2 position;void main(){gl_Position=vec4(position,0.,1.);}';
 
@@ -174,13 +183,26 @@
   let running = false;
   const startedAt = performance.now();
 
+  /* quality tier: 0 = every frame, 1 = 30fps, 2 = still */
+  const TIER_FULL = 0, TIER_HALF = 1, TIER_STILL = 2;
+  let tier = software ? TIER_STILL : TIER_FULL;
+  let lastDraw = 0;
+  let lastTick = 0;
+  let frozenAt = startedAt + 6000;   /* clock used while still */
+  let samples = [];
+  let settleFrame = 0;
+  let warmUntil = 0;   /* ignore load-time jank when judging pace */
+
+  if (software) root.classList.add('signal-lite');
+
   function hexToRgb01(hex) {
     const n = parseInt(hex.slice(1), 16);
     return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
   }
 
   function resize() {
-    dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1 : 1.5);
+    /* the 7px dot matrix reads the same at 1x; 1.5x cost 2.25x the pixels */
+    dpr = Math.min(window.devicePixelRatio || 1, 1);
     const w = Math.max(1, Math.floor(window.innerWidth * dpr));
     const h = Math.max(1, Math.floor(window.innerHeight * dpr));
     if (canvas.width !== w || canvas.height !== h) {
@@ -190,19 +212,19 @@
     gl.viewport(0, 0, w, h);
     gl.uniform2f(u.resolution, w, h);
     gl.uniform1f(u.cell, 7 * dpr);
-    if (!running) draw(performance.now());
+    if (!running) draw(frozenAt);
   }
 
   function lerp(a, b, k) { return a + (b - a) * k; }
 
-  function draw(now) {
-    const k = 0.05;
-    pointer.x = lerp(pointer.x, pointer.tx, 0.035);
-    pointer.y = lerp(pointer.y, pointer.ty, 0.035);
+  function draw(now, ease = 1) {
+    const k = 0.05 * ease;
+    pointer.x = lerp(pointer.x, pointer.tx, 0.035 * ease);
+    pointer.y = lerp(pointer.y, pointer.ty, 0.035 * ease);
     accent.mix = lerp(accent.mix, accent.tmix, k);
     for (let i = 0; i < 3; i++) accent.c[i] = lerp(accent.c[i], accent.tc[i], k);
-    focus.x = lerp(focus.x, focus.tx, 0.08);
-    focus.y = lerp(focus.y, focus.ty, 0.08);
+    focus.x = lerp(focus.x, focus.tx, Math.min(1, 0.08 * ease));
+    focus.y = lerp(focus.y, focus.ty, Math.min(1, 0.08 * ease));
     focus.mix = lerp(focus.mix, focus.tmix, k);
 
     gl.uniform1f(u.time, (now - startedAt) * 0.001);
@@ -214,14 +236,36 @@
     gl.drawArrays(gl.TRIANGLES, 0, 6);
   }
 
+  /* step down when the median frame interval over ~1.5s is too slow */
+  function govern(dt) {
+    if (dt > 250) return;   /* throttled window or a one-off hitch, not pace */
+    samples.push(dt);
+    if (samples.length < 45) return;
+    const sorted = samples.slice().sort((a, b) => a - b);
+    const median = sorted[sorted.length >> 1];
+    samples = [];
+    if (tier === TIER_FULL && median > 1000 / 45) tier = TIER_HALF;
+    else if (tier === TIER_HALF && median > 1000 / 22) goStill(performance.now());
+  }
+
   function loop(now) {
-    draw(now);
     frame = running ? requestAnimationFrame(loop) : 0;
+    /* judge the browser's frame cadence, not the gaps the 30fps cap leaves */
+    if (lastTick && now > warmUntil) govern(now - lastTick);
+    lastTick = now;
+    if (!running) return;
+    if (tier === TIER_HALF && now - lastDraw < 1000 / 30 - 4) return;
+    draw(now);
+    lastDraw = now;
   }
 
   function start() {
-    if (running || reduceMotion) return;
+    if (running || reduceMotion || tier === TIER_STILL) return;
     running = true;
+    lastDraw = 0;
+    lastTick = 0;
+    samples = [];
+    warmUntil = performance.now() + 1200;
     frame = requestAnimationFrame(loop);
   }
 
@@ -231,10 +275,34 @@
     frame = 0;
   }
 
+  function goStill(now) {
+    frozenAt = now;
+    tier = TIER_STILL;
+    stop();
+  }
+
+  function settled() {
+    const near = (a, b) => Math.abs(a - b) < 0.002;
+    return near(accent.mix, accent.tmix) && near(focus.mix, focus.tmix) &&
+      near(focus.x, focus.tx) && near(focus.y, focus.ty) &&
+      accent.c.every((c, i) => near(c, accent.tc[i]));
+  }
+
+  /* still mode: animate hover tints at a fixed clock until they land */
+  function settle() {
+    if (running || settleFrame) return;
+    const step = () => {
+      draw(frozenAt, reduceMotion ? 20 : 3);
+      settleFrame = settled() ? 0 : requestAnimationFrame(step);
+    };
+    settleFrame = requestAnimationFrame(step);
+  }
+
   /* ---- wiring -------------------------------------------------------------- */
 
   window.addEventListener('resize', resize, { passive: true });
   window.addEventListener('pointermove', (e) => {
+    if (!running) return;   /* drift only while animating */
     pointer.tx = e.clientX / Math.max(1, window.innerWidth);
     pointer.ty = 1 - e.clientY / Math.max(1, window.innerHeight);
   }, { passive: true });
@@ -244,25 +312,20 @@
   });
 
   resize();
-  if (reduceMotion) {
-    /* one settled frame, a little way into the animation */
-    draw(startedAt + 6000);
-  } else {
-    start();
-  }
+  start();
 
   window.Signal = {
     setAccent(hex, fx, fy) {
       accent.tc = hexToRgb01(hex);
       accent.tmix = 1;
       if (typeof fx === 'number') { focus.tx = fx; focus.ty = fy; focus.tmix = 1; }
-      if (reduceMotion) draw(performance.now());
+      settle();
     },
     clearAccent() {
       accent.tc = REST.slice();
       accent.tmix = 0;
       focus.tmix = 0;
-      if (reduceMotion) draw(performance.now());
+      settle();
     },
   };
 })();

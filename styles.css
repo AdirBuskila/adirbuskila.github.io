@@ -297,6 +297,14 @@ body {
   }
 }
 
+/* software GL (no GPU): skip the per-tile blur, lean on denser glass */
+.signal-lite .tile,
+.signal-lite .star-item {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  background: linear-gradient(160deg, rgba(21, 23, 31, 0.86), rgba(9, 10, 14, 0.92));
+}
+
 /* spotlight ring: accent light on the border nearest the pointer */
 .tile::before,
 .star-item::before {

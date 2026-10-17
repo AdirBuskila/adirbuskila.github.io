@@ -600,6 +600,26 @@ a.tile:focus-visible .arrow {
   margin-bottom: 22px;
 }
 
+/* Same glass plate as the tagline: the italic sublines sit over the ribbon field */
+.lab-sub,
+.starline-sub {
+  color: #c9ced8;
+  width: fit-content;
+  padding: 8px 14px 10px;
+  margin-inline-start: -14px;
+  border-radius: 12px;
+  background: rgba(10, 12, 18, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+@media (max-width: 559.98px) {
+  .lab-sub,
+  .starline-sub { margin-inline-start: 0; }
+}
+
 .lab-group + .lab-group { margin-top: 22px; }
 
 .lab-year {

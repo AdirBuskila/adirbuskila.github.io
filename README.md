@@ -26,25 +26,25 @@ it with a shared pointer spotlight on their borders.
 ## Launching a new tool
 
 Everything is driven by the `tools` array at the top of [`app.js`](app.js).
-To take a "BUILDING" tile live, edit its entry:
+The array is ordered chronologically through the degree. Every entry has a
+`year` (1-3) and, for years 1-2, a `sem` (`'A'` or `'B'`); the page builds one
+section per year/semester ("YEAR 1 · SEMESTER A", "YEAR 3") in array order, so
+put a new course in the right spot. Within a section, live tools render first as
+full glass tiles, then the BUILDING cards. The header counter ("N LIVE · M
+BUILDING") and the star section (same order, "This deck" last) are computed
+from the same array.
+
+Courses still being built are `status: 'soon'` entries with just `subject`,
+`glyph`, `nameHe`, `year`, `sem` and `accent`. To launch one, edit its entry:
 
 ```js
 status: 'soon',  →  status: 'live',
-url: '',         →  url: 'https://your-new-tool.example/',
 ```
 
-### The lab
-
-Courses still being built sit in the config as `status: 'soon'` entries with just
-`subject`, `nameHe`, `year` (1 or 2) and `accent`. They render as compact tiles in
-the "In the lab" section below the deck, grouped by year, and the header counter
-reads "N LIVE · M IN THE LAB". To launch one, flip it to `status: 'live'` and add
-`tag`, `blurb`, `glyph` (plus a new glyph in the `glyphs` map), `url` and `repo`.
-It then leaves the lab and joins the bento deck automatically.
-
-The deck's grid rules (`.deck > .tile:nth-child` in `styles.css`) are tuned for
-exactly 8 live tiles, so a 9th live tile means re-tuning them. The lab grid is
-generic and needs no changes.
+and add `tag`, `blurb`, `url` and `repo` (drop `nameHe`; the glyph is already
+set, or add a new one to the `glyphs` map). It keeps its year/semester section;
+the compact card just becomes a full tile. No CSS changes are needed: live tiles
+use a uniform 1 / 2 / 3 column grid and BUILDING cards a matching one.
 
 ## Run locally
 

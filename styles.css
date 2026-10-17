@@ -257,29 +257,45 @@ body {
 
 .gh-link:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 
-/* ---- Deck: asymmetric bento grid ---------------------------------------- */
+/* ---- Deck: chronological period sections -------------------------------- */
 
 .deck {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 4vw, 40px);
+}
+
+.period-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px 14px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+
+.period-title { font: inherit; letter-spacing: inherit; color: var(--cyan); }
+.period-count { color: var(--ink-faint); }
+
+.live-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 12px;
 }
 
-/* 8 tiles: wide hero on top, three even pairs, wide closer */
+.live-grid + .lab-grid { margin-top: 12px; }
+
 @media (min-width: 560px) and (max-width: 899.98px) {
-  .deck { grid-template-columns: 1fr 1fr; }
-  .deck > .tile:nth-child(1),
-  .deck > .tile:nth-child(8) { grid-column: span 2; }
+  .live-grid { grid-template-columns: 1fr 1fr; }
 }
 
-/* 8 tiles: two hero rows (1 + 3 wide, 2 tall on the side), a pair (4–5), then a row of three (6–8) */
 @media (min-width: 900px) {
-  .deck { grid-template-columns: repeat(6, 1fr); }
-  .deck > .tile:nth-child(1) { grid-column: span 4; }
-  .deck > .tile:nth-child(2) { grid-column: span 2; grid-row: span 2; }
-  .deck > .tile:nth-child(3) { grid-column: span 4; }
-  .deck > .tile:nth-child(n+4) { grid-column: span 3; }
-  .deck > .tile:nth-child(n+6) { grid-column: span 2; }
+  .live-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
 /* ---- Glass panels (tiles + star rows share the spotlight system) ------- */
@@ -565,71 +581,7 @@ a.tile:focus-visible .arrow {
 .is-soon .blurb,
 .is-soon .tile-meta { color: var(--ink-faint); opacity: 0.85; }
 
-/* ---- The lab: compact in-development tiles ------------------------------ */
-
-.lab {
-  margin-top: clamp(34px, 5vw, 52px);
-  padding-top: clamp(24px, 4vw, 36px);
-  border-top: 1px solid var(--line);
-  animation: fade-up 0.8s var(--ease-out) 0.55s both;
-}
-
-.lab:empty { display: none; }
-
-.lab-head {
-  display: flex;
-  align-items: baseline;
-  gap: 10px 14px;
-  flex-wrap: wrap;
-  margin-bottom: 8px;
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-}
-
-.lab-title { color: var(--cyan); }
-.lab-count { color: var(--ink-faint); }
-
-.lab-sub {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 1.15rem;
-  color: var(--ink-dim);
-  max-width: 58ch;
-  margin-bottom: 22px;
-}
-
-/* Same glass plate as the tagline: the italic sublines sit over the ribbon field */
-.lab-sub,
-.starline-sub {
-  color: #c9ced8;
-  width: fit-content;
-  padding: 8px 14px 10px;
-  margin-inline-start: -14px;
-  border-radius: 12px;
-  background: rgba(10, 12, 18, 0.62);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
-}
-
-@media (max-width: 559.98px) {
-  .lab-sub,
-  .starline-sub { margin-inline-start: 0; }
-}
-
-.lab-group + .lab-group { margin-top: 22px; }
-
-.lab-year {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  color: var(--ink-faint);
-  margin-bottom: 10px;
-}
+/* ---- Building cards: compact in-development tiles ----------------------- */
 
 .lab-grid {
   display: grid;

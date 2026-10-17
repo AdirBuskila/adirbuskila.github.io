@@ -1,19 +1,40 @@
 /* ==========================================================================
    TOOLS CONFIG — the only thing you ever need to edit.
 
-   Live tools fill the bento deck; status: 'soon' entries (subject, nameHe,
-   year, accent only) render as compact tiles in the "In the lab" section.
+   The array is ordered chronologically through the degree. Every tool has a
+   `year` (1-3) and, for years 1-2, a `sem` ('A' or 'B'); the page groups them
+   into "YEAR n · SEMESTER x" sections in array order. Inside a section, live
+   tools render first as full glass tiles, then status: 'soon' entries
+   (subject, nameHe, glyph, year, sem, accent only) as compact BUILDING cards.
 
-   To launch a lab course: flip it to status: 'live' and fill in tag, blurb,
-   glyph (add one to the glyphs map), url and repo. It then moves into the
-   deck automatically and the header counter updates. NOTE: the deck's bento
-   grid rules in styles.css (.deck > .tile:nth-child) are tuned for exactly
-   8 tiles, so a 9th+ live tile means re-tuning them.
+   To launch a course: flip it to status: 'live' and add tag, blurb, url and
+   repo (the glyph is already set). It keeps its year/semester section and its
+   card simply becomes a full tile; the header counter updates itself.
    ========================================================================== */
 
 const tools = [
+  // --- Year 1 · Semester A ---
+  { subject: 'Linear Algebra', glyph: 'matrix', nameHe: 'אלגברה ליניארית', year: 1, sem: 'A', status: 'soon', accent: '#818cf8' },
+  { subject: 'Discrete Math 1', glyph: 'venn', nameHe: 'בדידה 1', year: 1, sem: 'A', status: 'soon', accent: '#f472b6' },
+  { subject: 'Intro to CS', glyph: 'prompt', nameHe: 'מבוא למדעי המחשב', year: 1, sem: 'A', status: 'soon', accent: '#4ade80' },
+  { subject: 'Intro to Computer Systems', glyph: 'chip', nameHe: 'מבוא למערכות מחשב', year: 1, sem: 'A', status: 'soon', accent: '#94a3b8' },
+
+  // --- Year 1 · Semester B ---
+  { subject: 'Calculus 1', glyph: 'integral', nameHe: 'אינפי 1', year: 1, sem: 'B', status: 'soon', accent: '#f87171' },
+  { subject: 'Discrete Math 2', glyph: 'tree', nameHe: 'בדידה 2', year: 1, sem: 'B', status: 'soon', accent: '#e879f9' },
+  { subject: 'Data Structures', glyph: 'heap', nameHe: 'מבני נתונים', year: 1, sem: 'B', status: 'soon', accent: '#2dd4bf' },
+  { subject: 'Advanced Programming Workshop', glyph: 'pointer', nameHe: 'סדנה מתקדמת בתכנות', year: 1, sem: 'B', status: 'soon', accent: '#facc15' },
+  { subject: 'Object-Oriented Programming', glyph: 'classes', nameHe: 'תכנות מונחה עצמים', year: 1, sem: 'B', status: 'soon', accent: '#38bdf8' },
+
+  // --- Year 2 · Semester A ---
+  { subject: 'Calculus 2', glyph: 'surface', nameHe: 'אינפי 2', year: 2, sem: 'A', status: 'soon', accent: '#fca5a5' },
+  { subject: 'Algebra 2', glyph: 'group', nameHe: 'אלגברה 2', year: 2, sem: 'A', status: 'soon', accent: '#f0abfc' },
+  { subject: 'Algorithms 1', glyph: 'sort', nameHe: 'אלגוריתמים 1', year: 2, sem: 'A', status: 'soon', accent: '#c4b5fd' },
+  { subject: 'Probability', glyph: 'dice', nameHe: 'הסתברות', year: 2, sem: 'A', status: 'soon', accent: '#fdba74' },
   {
     subject: 'Data Science',
+    year: 2,
+    sem: 'A',
     tag: 'QUIZ ENGINE',
     blurb: 'Exam-style question drills for the data science course — instant feedback, topic breakdowns, zero setup.',
     status: 'live',
@@ -22,8 +43,13 @@ const tools = [
     accent: '#22d3ee',
     glyph: 'plot',
   },
+  { subject: 'Computer Networks', glyph: 'globe', nameHe: 'רשתות תקשורת מחשבים', year: 2, sem: 'A', status: 'soon', accent: '#67e8f9' },
+
+  // --- Year 2 · Semester B ---
   {
-    subject: 'Algorithms',
+    subject: 'Algorithms 2',
+    year: 2,
+    sem: 'B',
     tag: 'VISUAL TRAINER',
     blurb: 'Watch graphs, max-flow and shortest-path algorithms run step by step — then train on them yourself.',
     status: 'live',
@@ -33,17 +59,9 @@ const tools = [
     glyph: 'graph',
   },
   {
-    subject: 'Operating Systems',
-    tag: 'EXAM SIMULATOR',
-    blurb: 'An exam trainer distilled from 14 years of past exams — drill by topic and find your weak spots.',
-    status: 'live',
-    url: 'https://adirbuskila.github.io/os-exam-trainer/#home',
-    repo: 'https://github.com/AdirBuskila/os-exam-trainer',
-    accent: '#fbbf24',
-    glyph: 'rings',
-  },
-  {
     subject: 'Software Engineering',
+    year: 2,
+    sem: 'B',
     tag: 'PRACTICE KIT',
     blurb: 'Design patterns, UML and testing drills — the theory half of SWE, made practicable.',
     status: 'live',
@@ -54,6 +72,8 @@ const tools = [
   },
   {
     subject: 'Machine Learning',
+    year: 2,
+    sem: 'B',
     tag: 'QUIZ + THEORY',
     blurb: 'Exam-style drills plus a study mode with the core formulas — 13 topics of the ML course, instant feedback.',
     status: 'live',
@@ -64,6 +84,8 @@ const tools = [
   },
   {
     subject: 'Databases',
+    year: 2,
+    sem: 'B',
     tag: 'QUERY GYM',
     blurb: 'SQL, ERD, relational algebra and normalization — 206 questions pulled straight from past exams.',
     status: 'live',
@@ -73,7 +95,22 @@ const tools = [
     glyph: 'stack',
   },
   {
+    subject: 'Operating Systems',
+    year: 2,
+    sem: 'B',
+    tag: 'EXAM SIMULATOR',
+    blurb: 'An exam trainer distilled from 14 years of past exams — drill by topic and find your weak spots.',
+    status: 'live',
+    url: 'https://adirbuskila.github.io/os-exam-trainer/#home',
+    repo: 'https://github.com/AdirBuskila/os-exam-trainer',
+    accent: '#fbbf24',
+    glyph: 'rings',
+  },
+
+  // --- Year 3 (one group, no semester split) ---
+  {
     subject: 'Automata',
+    year: 3,
     tag: 'LANGUAGE LAB',
     blurb: 'DFA, NFA, PDA, Nerode and the pumping lemma — 349 past-exam questions with the original diagrams, plus an 11-chapter study mode.',
     status: 'live',
@@ -84,6 +121,7 @@ const tools = [
   },
   {
     subject: 'Computability',
+    year: 3,
     tag: 'REDUCTION LAB',
     blurb: 'R, RE, coRE, mapping and poly-time reductions, NP-completeness — 592 past-exam questions with worked proofs, plus a 13-chapter study mode.',
     status: 'live',
@@ -92,22 +130,6 @@ const tools = [
     accent: '#fb923c',
     glyph: 'sigma',
   },
-
-  // --- In the lab: courses being built (year 1, then year 2) ---
-  { subject: 'Linear Algebra', glyph: 'matrix', nameHe: 'אלגברה ליניארית', year: 1, status: 'soon', accent: '#818cf8' },
-  { subject: 'Discrete Math 1', glyph: 'venn', nameHe: 'בדידה 1', year: 1, status: 'soon', accent: '#f472b6' },
-  { subject: 'Intro to CS', glyph: 'prompt', nameHe: 'מבוא למדעי המחשב', year: 1, status: 'soon', accent: '#4ade80' },
-  { subject: 'Intro to Computer Systems', glyph: 'chip', nameHe: 'מבוא למערכות מחשב', year: 1, status: 'soon', accent: '#94a3b8' },
-  { subject: 'Calculus 1', glyph: 'integral', nameHe: 'אינפי 1', year: 1, status: 'soon', accent: '#f87171' },
-  { subject: 'Discrete Math 2', glyph: 'tree', nameHe: 'בדידה 2', year: 1, status: 'soon', accent: '#e879f9' },
-  { subject: 'Data Structures', glyph: 'heap', nameHe: 'מבני נתונים', year: 1, status: 'soon', accent: '#2dd4bf' },
-  { subject: 'Advanced Programming Workshop', glyph: 'pointer', nameHe: 'סדנה מתקדמת בתכנות', year: 1, status: 'soon', accent: '#facc15' },
-  { subject: 'Object-Oriented Programming', glyph: 'classes', nameHe: 'תכנות מונחה עצמים', year: 1, status: 'soon', accent: '#38bdf8' },
-  { subject: 'Calculus 2', glyph: 'surface', nameHe: 'אינפי 2', year: 2, status: 'soon', accent: '#fca5a5' },
-  { subject: 'Algorithms 1', glyph: 'sort', nameHe: 'אלגוריתמים 1', year: 2, status: 'soon', accent: '#c4b5fd' },
-  { subject: 'Computer Networks', glyph: 'globe', nameHe: 'רשתות תקשורת מחשבים', year: 2, status: 'soon', accent: '#67e8f9' },
-  { subject: 'Probability', glyph: 'dice', nameHe: 'הסתברות', year: 2, status: 'soon', accent: '#fdba74' },
-  { subject: 'Algebra 2', glyph: 'group', nameHe: 'אלגברה 2', year: 2, status: 'soon', accent: '#f0abfc' },
 ];
 
 /* ==========================================================================
@@ -232,7 +254,6 @@ function prettyUrl(url) {
 }
 
 const deck = document.getElementById('deck');
-const frag = document.createDocumentFragment();
 
 function setAccent(el, accent) {
   const [r, g, b] = hexToRgb(accent);
@@ -242,85 +263,92 @@ function setAccent(el, accent) {
   el.dataset.accent = accent;
 }
 
-tools.filter((t) => t.status === 'live').forEach((tool, i) => {
-  const live = true;
-  const el = document.createElement(live ? 'a' : 'article');
-  el.className = 'tile ' + (live ? 'is-live' : 'is-soon');
-
+function liveTile(tool, i) {
+  const el = document.createElement('a');
+  el.className = 'tile is-live';
   setAccent(el, tool.accent);
   el.style.setProperty('--i', i);
-
-  if (live) {
-    el.href = tool.url;
-    el.setAttribute('aria-label', `${tool.subject} — ${tool.tag.toLowerCase()}, open the tool`);
-  } else {
-    el.setAttribute('aria-label', `${tool.subject} — in development, coming soon`);
-  }
-
+  el.href = tool.url;
+  el.setAttribute('aria-label', `${tool.subject} — ${tool.tag.toLowerCase()}, open the tool`);
   el.innerHTML = `
     <span class="mark" aria-hidden="true">${glyphs[tool.glyph]}</span>
     <div class="tile-top">
       <span class="glyph">${glyphs[tool.glyph]}</span>
-      ${live
-        ? '<span class="chip chip-live"><span class="dot"></span>LIVE</span>'
-        : '<span class="chip chip-soon">BUILDING</span>'}
+      <span class="chip chip-live"><span class="dot"></span>LIVE</span>
     </div>
     <p class="tag">${tool.tag}</p>
-    <h2 class="subject">${tool.subject}</h2>
+    <h3 class="subject">${tool.subject}</h3>
     <p class="blurb">${tool.blurb}</p>
     <div class="tile-meta">
-      ${live
-        ? `<span class="url">${prettyUrl(tool.url)}</span><span class="arrow" aria-hidden="true">↗</span>`
-        : '<span class="url">url — reserved</span>'}
+      <span class="url">${prettyUrl(tool.url)}</span><span class="arrow" aria-hidden="true">↗</span>
     </div>`;
+  return el;
+}
 
-  frag.appendChild(el);
+function miniCard(tool, i) {
+  const el = document.createElement('article');
+  el.className = 'tile is-soon tile-mini';
+  setAccent(el, tool.accent);
+  el.style.setProperty('--i', i);
+  el.setAttribute('aria-label', `${tool.subject} — in development`);
+  el.innerHTML = `
+    <span class="mini-glyph" aria-hidden="true">${glyphs[tool.glyph]}</span>
+    <span class="mini-text">
+      <span class="mini-subject"></span>
+      <span class="mini-he" lang="he" dir="rtl"></span>
+    </span>
+    <span class="chip chip-soon">BUILDING</span>`;
+  el.querySelector('.mini-subject').textContent = tool.subject;
+  el.querySelector('.mini-he').textContent = tool.nameHe;
+  return el;
+}
+
+/* ---- Chronological sections: one per (year, sem), in config order ---- */
+
+const periods = [];
+tools.forEach((t) => {
+  const key = t.year + (t.sem || '');
+  let p = periods.find((x) => x.key === key);
+  if (!p) periods.push((p = { key, year: t.year, sem: t.sem, tools: [] }));
+  p.tools.push(t);
 });
 
-deck.appendChild(frag);
+periods.forEach((p) => {
+  let tileIndex = 0; // stagger restarts per section
+  const live = p.tools.filter((t) => t.status === 'live');
+  const soon = p.tools.filter((t) => t.status !== 'live');
+  const title = `YEAR ${p.year}` + (p.sem ? ` · SEMESTER ${p.sem}` : '');
+  const count = [live.length && `${live.length} LIVE`, soon.length && `${soon.length} BUILDING`]
+    .filter(Boolean).join(' · ');
 
-/* ---- The lab: compact tiles for every 'soon' tool, grouped by year ---- */
+  const section = document.createElement('section');
+  section.className = 'period';
+  section.setAttribute('aria-label', title.toLowerCase());
+  section.innerHTML = `
+    <div class="period-head">
+      <h2 class="period-title">${title}</h2>
+      <span class="period-count">${count}</span>
+    </div>`;
 
-const soonTools = tools.filter((t) => t.status !== 'live');
-const lab = document.getElementById('lab');
-if (lab && soonTools.length) {
-  lab.innerHTML = `
-    <div class="lab-head">
-      <span class="lab-title">IN THE LAB</span>
-      <span class="lab-count">${soonTools.length} COURSES BUILDING</span>
-    </div>
-    <p class="lab-sub">Every year-1 and year-2 course is on the way. Each lights up here when it goes live.</p>`;
-
-  [...new Set(soonTools.map((t) => t.year))].sort().forEach((year) => {
-    const group = document.createElement('div');
-    group.className = 'lab-group';
-    group.innerHTML = `<p class="lab-year">YEAR ${year}</p><div class="lab-grid"></div>`;
-    const grid = group.querySelector('.lab-grid');
-    soonTools.filter((t) => t.year === year).forEach((tool, j) => {
-      const el = document.createElement('article');
-      el.className = 'tile is-soon tile-mini';
-      setAccent(el, tool.accent);
-      el.style.setProperty('--i', j);
-      el.setAttribute('aria-label', `${tool.subject} — in development`);
-      el.innerHTML = `
-        <span class="mini-glyph" aria-hidden="true">${glyphs[tool.glyph]}</span>
-        <span class="mini-text">
-          <span class="mini-subject"></span>
-          <span class="mini-he" lang="he" dir="rtl"></span>
-        </span>
-        <span class="chip chip-soon">BUILDING</span>`;
-      el.querySelector('.mini-subject').textContent = tool.subject;
-      el.querySelector('.mini-he').textContent = tool.nameHe;
-      grid.appendChild(el);
-    });
-    lab.appendChild(group);
-  });
-}
+  if (live.length) {
+    const grid = document.createElement('div');
+    grid.className = 'live-grid';
+    live.forEach((t) => grid.appendChild(liveTile(t, tileIndex++)));
+    section.appendChild(grid);
+  }
+  if (soon.length) {
+    const grid = document.createElement('div');
+    grid.className = 'lab-grid';
+    soon.forEach((t) => grid.appendChild(miniCard(t, tileIndex++)));
+    section.appendChild(grid);
+  }
+  deck.appendChild(section);
+});
 
 const liveCount = tools.filter((t) => t.status === 'live').length;
 const soonCount = tools.length - liveCount;
 document.getElementById('deck-count').textContent =
-  soonCount > 0 ? `${liveCount} LIVE · ${soonCount} IN THE LAB` : `${liveCount} LIVE`;
+  soonCount > 0 ? `${liveCount} LIVE · ${soonCount} BUILDING` : `${liveCount} LIVE`;
 
 /* ==========================================================================
    Star the source — repo links, built from the same config.

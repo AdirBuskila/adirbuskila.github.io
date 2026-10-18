@@ -517,6 +517,17 @@ a.tile:focus-visible .glyph {
   color: #fff;
 }
 
+/* the course's Hebrew name, small, under the English title */
+.subject-he {
+  margin: -4px 0 11px;
+  text-align: left;
+  font-size: 0.98rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--accent);
+  opacity: 0.85;
+}
+
 .blurb {
   color: var(--ink-dim);
   font-size: 0.93rem;

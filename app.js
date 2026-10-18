@@ -8,7 +8,8 @@
    (subject, nameHe, glyph, year, sem, accent only) as compact BUILDING cards.
 
    To launch a course: flip it to status: 'live' and add tag, blurb, url and
-   repo (the glyph is already set). It keeps its year/semester section and its
+   repo (the glyph and nameHe are already set; the Hebrew name shows under
+   the English title on both card kinds). It keeps its year/semester section and its
    card simply becomes a full tile; the header counter updates itself.
    ========================================================================== */
 
@@ -129,6 +130,7 @@ const tools = [
   { subject: 'Probability', glyph: 'dice', nameHe: 'הסתברות', year: 2, sem: 'A', status: 'soon', accent: '#fdba74' },
   {
     subject: 'Data Science',
+    nameHe: 'מבוא למדעי הנתונים',
     year: 2,
     sem: 'A',
     tag: 'QUIZ ENGINE',
@@ -144,6 +146,7 @@ const tools = [
   // --- Year 2 · Semester B ---
   {
     subject: 'Algorithms 2',
+    nameHe: 'אלגוריתמים 2',
     year: 2,
     sem: 'B',
     tag: 'VISUAL TRAINER',
@@ -156,6 +159,7 @@ const tools = [
   },
   {
     subject: 'Software Engineering',
+    nameHe: 'הנדסת תוכנה',
     year: 2,
     sem: 'B',
     tag: 'PRACTICE KIT',
@@ -168,6 +172,7 @@ const tools = [
   },
   {
     subject: 'Machine Learning',
+    nameHe: 'למידת מכונה',
     year: 2,
     sem: 'B',
     tag: 'QUIZ + THEORY',
@@ -180,6 +185,7 @@ const tools = [
   },
   {
     subject: 'Databases',
+    nameHe: 'מערכות בסיסי נתונים',
     year: 2,
     sem: 'B',
     tag: 'QUERY GYM',
@@ -192,6 +198,7 @@ const tools = [
   },
   {
     subject: 'Operating Systems',
+    nameHe: 'מערכות הפעלה',
     year: 2,
     sem: 'B',
     tag: 'EXAM SIMULATOR',
@@ -206,6 +213,7 @@ const tools = [
   // --- Year 3 (one group, no semester split) ---
   {
     subject: 'Automata',
+    nameHe: 'אוטומטים ושפות פורמליות',
     year: 3,
     tag: 'LANGUAGE LAB',
     blurb: 'DFA, NFA, PDA, Nerode and the pumping lemma — 349 past-exam questions with the original diagrams, plus an 11-chapter study mode.',
@@ -217,6 +225,7 @@ const tools = [
   },
   {
     subject: 'Computability',
+    nameHe: 'חישוביות וסיבוכיות',
     year: 3,
     tag: 'REDUCTION LAB',
     blurb: 'R, RE, coRE, mapping and poly-time reductions, NP-completeness — 592 past-exam questions with worked proofs, plus a 13-chapter study mode.',
@@ -374,10 +383,14 @@ function liveTile(tool, i) {
     </div>
     <p class="tag">${tool.tag}</p>
     <h3 class="subject">${tool.subject}</h3>
+    <p class="subject-he" lang="he" dir="rtl"></p>
     <p class="blurb">${tool.blurb}</p>
     <div class="tile-meta">
       <span class="url">${prettyUrl(tool.url)}</span><span class="arrow" aria-hidden="true">↗</span>
     </div>`;
+  const he = el.querySelector('.subject-he');
+  if (tool.nameHe) he.textContent = tool.nameHe;
+  else he.remove();
   return el;
 }
 

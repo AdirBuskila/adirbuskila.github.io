@@ -17,7 +17,19 @@ const tools = [
   { subject: 'Linear Algebra', glyph: 'matrix', nameHe: 'אלגברה ליניארית', year: 1, sem: 'A', status: 'soon', accent: '#818cf8' },
   { subject: 'Discrete Math 1', glyph: 'venn', nameHe: 'בדידה 1', year: 1, sem: 'A', status: 'soon', accent: '#f472b6' },
   { subject: 'Intro to CS', glyph: 'prompt', nameHe: 'מבוא למדעי המחשב', year: 1, sem: 'A', status: 'soon', accent: '#4ade80' },
-  { subject: 'Intro to Computer Systems', glyph: 'chip', nameHe: 'מבוא למערכות מחשב', year: 1, sem: 'A', status: 'soon', accent: '#94a3b8' },
+  {
+    subject: 'Intro to Computer Systems',
+    nameHe: 'מבוא למערכות מחשב',
+    year: 1,
+    sem: 'A',
+    tag: 'EXAM TRAINER',
+    blurb: 'Number bases, IEEE-754, logic circuits and MIPS — 238 real exam questions, learn chapters and guided courses.',
+    status: 'live',
+    url: 'https://adirbuskila.github.io/computer-systems-quiz/',
+    repo: 'https://github.com/AdirBuskila/computer-systems-quiz',
+    accent: '#94a3b8',
+    glyph: 'chip',
+  },
 
   // --- Year 1 · Semester B ---
   { subject: 'Calculus 1', glyph: 'integral', nameHe: 'אינפי 1', year: 1, sem: 'B', status: 'soon', accent: '#f87171' },

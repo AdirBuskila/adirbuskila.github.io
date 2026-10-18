@@ -36,7 +36,19 @@ const tools = [
   { subject: 'Discrete Math 2', glyph: 'tree', nameHe: 'בדידה 2', year: 1, sem: 'B', status: 'soon', accent: '#e879f9' },
   { subject: 'Data Structures', glyph: 'heap', nameHe: 'מבני נתונים', year: 1, sem: 'B', status: 'soon', accent: '#2dd4bf' },
   { subject: 'Advanced Programming Workshop', glyph: 'pointer', nameHe: 'סדנה מתקדמת בתכנות', year: 1, sem: 'B', status: 'soon', accent: '#facc15' },
-  { subject: 'Object-Oriented Programming', glyph: 'classes', nameHe: 'תכנות מונחה עצמים', year: 1, sem: 'B', status: 'soon', accent: '#38bdf8' },
+  {
+    subject: 'Object-Oriented Programming',
+    nameHe: 'תכנות מונחה עצמים',
+    year: 1,
+    sem: 'B',
+    tag: 'EXAM TRAINER',
+    blurb: 'C++ copy control, virtuals, construction order and operators — 380 real exam questions, every key compiler-checked.',
+    status: 'live',
+    url: 'https://adirbuskila.github.io/oop-quiz/',
+    repo: 'https://github.com/AdirBuskila/oop-quiz',
+    accent: '#38bdf8',
+    glyph: 'classes',
+  },
 
   // --- Year 2 · Semester A ---
   { subject: 'Calculus 2', glyph: 'surface', nameHe: 'אינפי 2', year: 2, sem: 'A', status: 'soon', accent: '#fca5a5' },

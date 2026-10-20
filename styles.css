@@ -697,9 +697,25 @@ a.tile:focus-visible .arrow {
   font-family: var(--serif);
   font-style: italic;
   font-size: 1.15rem;
-  color: var(--ink-dim);
+  line-height: 1.25;
+  color: #c9ced8;
   max-width: 58ch;
+  width: fit-content;
   margin-bottom: 20px;
+  /* glass plate so the line stays legible over the ribbon field
+     (same treatment as .tagline) */
+  padding: 10px 16px 12px;
+  margin-inline-start: -16px;
+  border-radius: 14px;
+  background: rgba(10, 12, 18, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+@media (max-width: 559.98px) {
+  .starline-sub { margin-inline-start: 0; }
 }
 
 .star-grid {

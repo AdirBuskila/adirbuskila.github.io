@@ -137,7 +137,19 @@ const tools = [
 
   // --- Year 2 · Semester A ---
   { subject: 'Calculus 2', glyph: 'surface', nameHe: 'אינפי 2', year: 2, sem: 'A', status: 'soon', accent: '#fca5a5' },
-  { subject: 'Algebra 2', glyph: 'group', nameHe: 'אלגברה 2', year: 2, sem: 'A', status: 'soon', accent: '#f0abfc' },
+  {
+    subject: 'Algebra 2',
+    nameHe: 'אלגברה 2',
+    year: 2,
+    sem: 'A',
+    tag: 'EXAM TRAINER',
+    blurb: 'Every exam since 2023, solved step by step — inner products, SVD, orthogonal diagonalization, groups and CRT, with guided courses.',
+    status: 'live',
+    url: 'https://adirbuskila.github.io/algebra-2-quiz/',
+    repo: 'https://github.com/AdirBuskila/algebra-2-quiz',
+    accent: '#f0abfc',
+    glyph: 'group',
+  },
   { subject: 'Algorithms 1', glyph: 'sort', nameHe: 'אלגוריתמים 1', year: 2, sem: 'A', status: 'soon', accent: '#c4b5fd' },
   {
     subject: 'Probability',

@@ -165,7 +165,19 @@ const tools = [
     accent: '#22d3ee',
     glyph: 'plot',
   },
-  { subject: 'Computer Networks', glyph: 'globe', nameHe: 'רשתות תקשורת מחשבים', year: 2, sem: 'A', status: 'soon', accent: '#67e8f9' },
+  {
+    subject: 'Computer Networks',
+    nameHe: 'רשתות תקשורת מחשבים',
+    year: 2,
+    sem: 'A',
+    tag: 'EXAM TRAINER',
+    blurb: 'Every exam question since 2022 — built-in subnet, delay, CRC and TCP-window calculators, plus guided courses for each hard topic.',
+    status: 'live',
+    url: 'https://adirbuskila.github.io/networks-quiz/',
+    repo: 'https://github.com/AdirBuskila/networks-quiz',
+    accent: '#67e8f9',
+    glyph: 'globe',
+  },
 
   // --- Year 2 · Semester B ---
   {

@@ -136,7 +136,19 @@ const tools = [
   },
 
   // --- Year 2 · Semester A ---
-  { subject: 'Calculus 2', glyph: 'surface', nameHe: 'אינפי 2', year: 2, sem: 'A', status: 'soon', accent: '#fca5a5' },
+  {
+    subject: 'Calculus 2',
+    nameHe: 'אינפי 2',
+    year: 2,
+    sem: 'A',
+    tag: 'EXAM TRAINER',
+    blurb: 'Every exam since 2022, solved step by step — integration-region diagrams with order swaps, contour plots for extrema and Lagrange.',
+    status: 'live',
+    url: 'https://adirbuskila.github.io/calculus-2-quiz/',
+    repo: 'https://github.com/AdirBuskila/calculus-2-quiz',
+    accent: '#fca5a5',
+    glyph: 'surface',
+  },
   {
     subject: 'Algebra 2',
     nameHe: 'אלגברה 2',

@@ -86,5 +86,7 @@ signal background; `--force-prefers-reduced-motion` makes `signal.js` draw one
 deterministic frame instead of running its rAF loop (which would otherwise eat
 the virtual-time budget and freeze CSS animations at frame 0).
 
-Edit the template, re-run, commit. Note: OG images are cached hard by
+The card loads `app.js` and builds its tiles and LIVE count from the `tools`
+array, grouped by year, so after launching a course just re-run and commit.
+Over-long names get a short label in the template's `SHORT` map. Note: OG images are cached hard by
 WhatsApp/LinkedIn — use their debuggers (e.g. LinkedIn Post Inspector) to bust it.

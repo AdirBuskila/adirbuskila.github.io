@@ -22,42 +22,44 @@
   .grain { position: fixed; inset: 0; z-index: 0; opacity: .45; pointer-events: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"); }
 
-  .card { position: relative; z-index: 1; width: 1200px; height: 630px; padding: 70px 80px 62px;
-    display: flex; align-items: center; justify-content: space-between; gap: 40px; }
+  .card { position: relative; z-index: 1; width: 1200px; height: 630px; padding: 54px 60px 54px 72px;
+    display: flex; align-items: center; justify-content: space-between; gap: 44px; }
 
   .mono { font-family: 'JetBrains Mono', monospace; }
-  .left { max-width: 560px; }
-  .handle { display: inline-flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 600; letter-spacing: .18em; color: #737b88; }
+  .left { width: 392px; flex: none; }
+  .handle { display: inline-flex; align-items: center; gap: 12px; font-size: 17px; font-weight: 600; letter-spacing: .18em; color: #737b88; }
   .handle .dot { width: 9px; height: 9px; border-radius: 50%; background: #22d3ee; box-shadow: 0 0 12px #22d3ee, 0 0 3px #22d3ee; }
   .handle b { color: #22d3ee; font-weight: 600; }
   .handle .sep { opacity: .35; }
-  .name { font-size: 98px; font-weight: 700; letter-spacing: -0.045em; line-height: .98; color: #fff; margin: 26px 0 22px;
+  .name { font-size: 92px; font-weight: 700; letter-spacing: -0.045em; line-height: .96; color: #fff; margin: 24px 0 22px;
     text-shadow: 0 2px 24px rgba(0,0,0,.55), 0 0 60px rgba(0,0,0,.5); }
-  .sub { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 33px; line-height: 1.22; color: #a4abb7; max-width: 20ch;
+  .sub { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 31px; line-height: 1.22; color: #a4abb7; max-width: 19ch;
     text-shadow: 0 1px 18px rgba(0,0,0,.7), 0 0 40px rgba(0,0,0,.6); }
-  .url { font-size: 19px; font-weight: 600; letter-spacing: .1em; color: #737b88; margin-top: 46px; }
+  .url { font-size: 18px; font-weight: 600; letter-spacing: .1em; color: #737b88; margin-top: 40px; }
   .url b { color: #eceef4; font-weight: 600; }
 
-  .tiles { display: grid; grid-template-columns: 236px 236px; gap: 12px; }
-  .tile.wide { grid-column: span 2; }
+  /* all live tools, grouped by year — built from the tools array in app.js */
+  .board { flex: 1; display: flex; flex-direction: column; gap: 14px; }
+  .yr { display: flex; flex-direction: column; gap: 8px; }
+  .yr-head { display: flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 600; letter-spacing: .2em; color: #a4abb7;
+    text-shadow: 0 0 6px #0a0b0e, 0 0 14px #0a0b0e, 0 0 24px #0a0b0e; }
+  .yr-head b { color: #fff; font-weight: 600; }
+  .yr-head::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(255,255,255,.14), transparent); }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .tile {
-    position: relative; height: 104px; padding: 15px 20px; border-radius: 18px; overflow: hidden;
+    position: relative; height: 44px; padding: 0 12px; border-radius: 12px; overflow: hidden;
     border: 1px solid var(--ad);
-    background: linear-gradient(160deg, rgba(21,23,31,.68), rgba(9,10,14,.78));
+    background: linear-gradient(160deg, rgba(21,23,31,.72), rgba(9,10,14,.82));
     -webkit-backdrop-filter: blur(18px) saturate(1.5); backdrop-filter: blur(18px) saturate(1.5);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 24px 60px -34px rgba(0,0,0,.9);
-    display: flex; flex-direction: column; justify-content: space-between;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 18px 40px -28px rgba(0,0,0,.9);
+    display: flex; align-items: center; gap: 10px;
   }
   .tile::after { content: ''; position: absolute; inset: 0;
-    background: radial-gradient(260px 120px at 90% -10%, var(--af), transparent 70%); }
+    background: radial-gradient(140px 60px at 0% 50%, var(--af), transparent 75%); }
   .tile > * { position: relative; z-index: 1; }
-  .row { display: flex; justify-content: space-between; align-items: center; }
-  .tag { font-size: 11.5px; font-weight: 600; letter-spacing: .18em; color: var(--a); }
-  .chip { font-size: 10px; font-weight: 600; letter-spacing: .16em; color: var(--a);
-    border: 1px solid var(--ad); background: var(--af); border-radius: 999px; padding: 4px 10px;
-    display: inline-flex; align-items: center; gap: 6px; }
-  .chip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--a); box-shadow: 0 0 8px var(--a); }
-  .t { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: #fff; }
+  .g { flex: none; display: flex; color: var(--a); filter: drop-shadow(0 0 6px var(--ad)); }
+  .g svg { width: 19px; height: 19px; }
+  .t { font-size: 14.5px; font-weight: 700; letter-spacing: -0.01em; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 </style>
 </head>
 <body>
@@ -68,47 +70,46 @@
 
 <div class="card">
   <div class="left">
-    <div class="handle mono"><span class="dot"></span><b>22 LIVE</b><span class="sep">·</span>@ADIRBUSKILA</div>
+    <div class="handle mono"><span class="dot"></span><b id="count">LIVE</b><span class="sep">·</span>@ADIRBUSKILA</div>
     <div class="name">Adir Buskila</div>
     <div class="sub">Tools I build for CS exam prep — free, interactive, in the browser.</div>
     <div class="url mono"><b>adirbuskila.github.io</b></div>
   </div>
-  <div class="tiles">
-    <div class="tile" style="--a:#22d3ee; --ad:rgba(34,211,238,.45); --af:rgba(34,211,238,.13)">
-      <div class="row"><span class="tag mono">QUIZ ENGINE</span><span class="chip mono"><span class="dot"></span>LIVE</span></div>
-      <div class="t">Data Science</div>
-    </div>
-    <div class="tile" style="--a:#a78bfa; --ad:rgba(167,139,250,.45); --af:rgba(167,139,250,.13)">
-      <div class="row"><span class="tag mono">VISUAL TRAINER</span><span class="chip mono"><span class="dot"></span>LIVE</span></div>
-      <div class="t">Algorithms</div>
-    </div>
-    <div class="tile" style="--a:#fbbf24; --ad:rgba(251,191,36,.45); --af:rgba(251,191,36,.13)">
-      <div class="row"><span class="tag mono">EXAM SIMULATOR</span><span class="chip mono"><span class="dot"></span>LIVE</span></div>
-      <div class="t">Operating Systems</div>
-    </div>
-    <div class="tile" style="--a:#34d399; --ad:rgba(52,211,153,.45); --af:rgba(52,211,153,.13)">
-      <div class="row"><span class="tag mono">PRACTICE KIT</span><span class="chip mono"><span class="dot"></span>LIVE</span></div>
-      <div class="t">Software Engineering</div>
-    </div>
-    <div class="tile" style="--a:#fb7185; --ad:rgba(251,113,133,.45); --af:rgba(251,113,133,.13)">
-      <div class="row"><span class="tag mono">QUIZ + THEORY</span><span class="chip mono"><span class="dot"></span>LIVE</span></div>
-      <div class="t">Machine Learning</div>
-    </div>
-    <div class="tile" style="--a:#60a5fa; --ad:rgba(96,165,250,.45); --af:rgba(96,165,250,.13)">
-      <div class="row"><span class="tag mono">QUERY GYM</span><span class="chip mono"><span class="dot"></span>LIVE</span></div>
-      <div class="t">Databases</div>
-    </div>
-    <div class="tile" style="--a:#a3e635; --ad:rgba(163,230,53,.45); --af:rgba(163,230,53,.13)">
-      <div class="row"><span class="tag mono">LANGUAGE LAB</span><span class="chip mono"><span class="dot"></span>LIVE</span></div>
-      <div class="t">Automata</div>
-    </div>
-    <div class="tile" style="--a:#fb923c; --ad:rgba(251,146,60,.45); --af:rgba(251,146,60,.13)">
-      <div class="row"><span class="tag mono">REDUCTION LAB</span><span class="chip mono"><span class="dot"></span>LIVE</span></div>
-      <div class="t">Computability</div>
-    </div>
-  </div>
+  <div class="board" id="board"></div>
 </div>
 
+<!-- app.js renders the site into these; the card only borrows its tools + glyphs -->
+<div hidden><div id="deck"></div><span id="deck-count"></span></div>
+<script src="app.js"></script>
+<script>
+  // names too long for a 3-column tile
+  const SHORT = {
+    'Advanced Programming Workshop': 'Prog. Workshop',
+    'Intro to Computer Systems': 'Computer Systems',
+    'Object-Oriented Programming': 'OOP',
+  };
+  const rgba = (hex, a) => {
+    const n = parseInt(hex.slice(1), 16);
+    return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`;
+  };
+  const live = tools.filter((t) => t.status === 'live');
+  document.getElementById('count').textContent = `${live.length} LIVE`;
+  const board = document.getElementById('board');
+  [...new Set(live.map((t) => t.year))].forEach((year) => {
+    const list = live.filter((t) => t.year === year);
+    const yr = document.createElement('div');
+    yr.className = 'yr';
+    yr.innerHTML = `<div class="yr-head mono"><b>YEAR ${year}</b>${list.length} TOOLS</div><div class="grid"></div>`;
+    list.forEach((t) => {
+      const el = document.createElement('div');
+      el.className = 'tile';
+      el.style.cssText = `--a:${t.accent}; --ad:${rgba(t.accent, .42)}; --af:${rgba(t.accent, .16)}`;
+      el.innerHTML = `<span class="g">${glyphs[t.glyph]}</span><span class="t">${SHORT[t.subject] || t.subject}</span>`;
+      yr.lastChild.appendChild(el);
+    });
+    board.appendChild(yr);
+  });
+</script>
 <script src="signal.js"></script>
 </body>
 </html>

@@ -257,6 +257,33 @@ body {
 
 .gh-link:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 
+/* GitHub + Buy Me a Coffee, stacked on the header's trailing edge */
+.header-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+/* same pill as .gh-link, with an amber beam */
+.coffee-link {
+  color: #fbbf24;
+  background:
+    linear-gradient(var(--bg-2), var(--bg-2)) padding-box,
+    conic-gradient(from var(--beam),
+      rgba(251, 191, 36, 0.22) 0%, rgba(251, 191, 36, 0.22) 55%,
+      #fbbf24 70%, #fb923c 82%,
+      rgba(251, 191, 36, 0.22) 100%) border-box;
+  box-shadow: 0 10px 30px -14px rgba(251, 191, 36, 0.4);
+}
+
+.coffee-link .ext { color: #fbbf24; }
+
+.coffee-link:hover,
+.coffee-link:focus-visible { box-shadow: 0 14px 40px -12px rgba(251, 191, 36, 0.6); }
+
+.coffee-link:focus-visible { outline-color: #fbbf24; }
+
 /* ---- Deck: chronological period sections -------------------------------- */
 
 .deck {

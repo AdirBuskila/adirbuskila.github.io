@@ -257,7 +257,7 @@ body {
 
 .gh-link:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 
-/* GitHub + Buy Me a Coffee, stacked on the header's trailing edge */
+/* header CTAs, stacked on the header's trailing edge */
 .header-links {
   display: flex;
   flex-wrap: wrap;
@@ -283,6 +283,13 @@ body {
 .coffee-link:focus-visible { box-shadow: 0 14px 40px -12px rgba(251, 191, 36, 0.6); }
 
 .coffee-link:focus-visible { outline-color: #fbbf24; }
+
+/* Buy Me a Coffee sits between the deck and the star grid */
+.coffee-row {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(34px, 5vw, 52px);
+}
 
 /* ---- Deck: chronological period sections -------------------------------- */
 
